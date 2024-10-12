@@ -18,17 +18,17 @@ namespace ASM.Repositories.Repositories
 
         public void Add(params TEntity[] entities)
         {
-
+            PerformDbOperation(_dbSet.Add, entities);
         }
 
         public void Update(params TEntity[] entities)
         {
-            throw new NotImplementedException();
+            PerformDbOperation(_dbSet.Update, entities);
         }
 
         public void Delete(params TEntity[] entities)
         {
-            throw new NotImplementedException();
+            PerformDbOperation(_dbSet.Remove, entities);
         }
 
         private void PerformDbOperation(Func<TEntity, EntityEntry<TEntity>> dbOperation, params TEntity[] entities)

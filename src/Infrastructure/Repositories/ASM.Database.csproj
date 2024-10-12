@@ -14,4 +14,9 @@
     <ProjectReference Include="..\..\Core\Domain\ASM.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EntityConfiguration\" />
+    <Folder Include="Migration\" />
+  </ItemGroup>
+
 </Project>
