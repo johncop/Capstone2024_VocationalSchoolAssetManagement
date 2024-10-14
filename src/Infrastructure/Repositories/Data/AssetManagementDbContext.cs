@@ -13,8 +13,8 @@ namespace ASM.Database.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(AssetManagementDbContext).Assembly);
+            base.OnModelCreating(builder);
         }
 
         public override int SaveChanges()
