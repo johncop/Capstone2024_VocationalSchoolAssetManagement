@@ -1,9 +1,7 @@
-﻿using ASM.Application.CustomException;
-using ASM.Application.ExceptionHandlers.Extensions;
-using ASM.Application.ExceptionHandlers.Interfaces;
+﻿using ASM.Application.Helper;
+using ASM.Domain.Entities.Enum;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,8 +73,8 @@ namespace ASM.Application
             IConfigurationSection appSettingsSection = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            AppSettings appSettings = appSettingsSection.Get<AppSettings>();
-            byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            AppSettings appSettings = appSettingsSection.Get<AppSettings>()!;
+            byte[] key = Encoding.ASCII.GetBytes(appSettings!.Secret);
 
             services
                 .AddAuthentication(opt =>
@@ -103,35 +101,6 @@ namespace ASM.Application
                 options.AddPolicy(nameof(RoleCollection.Admin), policy => policy.RequireRole(nameof(RoleCollection.Admin)));
                 options.AddPolicy(nameof(RoleCollection.User), policy => policy.RequireRole(nameof(RoleCollection.User)));
             });
-            return services;
-        }
-        #endregion
-
-        #region Configuration Application
-
-        public static IServiceCollection AddCoreDependencies(this IServiceCollection services, IServiceProvider provider)
-        {
-            #region Exception Handling
-
-            if (provider.GetService<IExceptionHandler<FluentValidation.ValidationException, ValidationProblemDetails>>() is null)
-            {
-                services.AddScoped(typeof(IExceptionHandler<FluentValidation.ValidationException, ValidationProblemDetails>), typeof(ValidationExceptionHandler));
-            }
-
-            if (provider.GetService<IExceptionHandler<Exception, ProblemDetails>>() is null)
-            {
-                services.AddScoped(typeof(IExceptionHandler<Exception, ProblemDetails>), typeof(UnhandledExceptionHandler));
-            }
-
-            #endregion
-            return services;
-        }
-
-        public static IServiceCollection AddDefaultExceptionHandlers(this IServiceCollection services)
-        {
-            services.AddScoped(typeof(IExceptionHandler<FluentValidation.ValidationException, ProblemDetails>), typeof(ValidationExceptionHandler));
-            services.AddScoped(typeof(IExceptionHandler<Exception, ProblemDetails>), typeof(UnhandledExceptionHandler));
-            services.AddScoped(typeof(IExceptionHandler<DomainException, ProblemDetails>), typeof(DomainExceptionHandler));
             return services;
         }
         #endregion

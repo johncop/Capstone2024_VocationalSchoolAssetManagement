@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ASM.Application.Base
+namespace ASM.Application.Base.Interfaces
 {
     public interface IResponse
     {
