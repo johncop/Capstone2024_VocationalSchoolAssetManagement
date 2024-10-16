@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace ASM.Domain.Entities
+namespace ASM.Core.Entities
 {
     public class ApplicationUser : IdentityUser<int>
     {
@@ -10,7 +10,7 @@ namespace ASM.Domain.Entities
 
         [MaxLength(100)]
         public string LastName { get; set; }
-        
+
         public string Address { get; set; }
     }
 }

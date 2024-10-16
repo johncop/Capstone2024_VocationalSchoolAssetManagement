@@ -1,6 +1,6 @@
-﻿using Domain.Entities.Common;
+﻿using ASM.Core.Entities.Common;
 
-namespace ASM.Domain.Entities
+namespace ASM.Core.Entities
 {
     public class Request : BaseEntity
     {

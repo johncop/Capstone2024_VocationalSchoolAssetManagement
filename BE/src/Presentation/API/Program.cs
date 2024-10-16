@@ -1,7 +1,9 @@
 using ASM.Application;
+using ASM.Core.Entities;
 using ASM.Database.Data;
-using ASM.Domain.Entities;
 using ASM.Repositories;
+using ASM.Services.Interfaces;
+using ASM.Services.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +36,9 @@ services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme)
 services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<AssetManagementDbContext>()
     .AddApiEndpoints();
+
+//Config services
+services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 
 var app = builder.Build();
 

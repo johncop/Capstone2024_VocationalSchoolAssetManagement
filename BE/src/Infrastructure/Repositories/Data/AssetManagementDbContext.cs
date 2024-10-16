@@ -1,5 +1,5 @@
-﻿using ASM.Domain.Entities;
-using Domain.Entities.Common;
+﻿using ASM.Core.Entities;
+using ASM.Core.Entities.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Common
+namespace ASM.Core.Entities.Common
 {
     public class BaseEntity
     {

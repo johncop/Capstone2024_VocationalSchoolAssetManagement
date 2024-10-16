@@ -1,4 +1,4 @@
-namespace API;
+namespace ASM.WebApi;
 
 public class WeatherForecast
 {

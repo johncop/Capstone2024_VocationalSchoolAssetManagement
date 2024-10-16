@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ASM.Domain.Entities
+namespace ASM.Core.Entities
 {
     public class RequestDetails
     {

@@ -1,4 +1,4 @@
-﻿namespace ASM.Domain.Entities
+﻿namespace ASM.Core.Entities
 {
     public class AssetInventory
     {
