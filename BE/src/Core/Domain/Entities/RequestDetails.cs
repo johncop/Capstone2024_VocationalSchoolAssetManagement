@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ASM.Core.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASM.Core.Entities
 {
-    public class RequestDetails
+    public class RequestDetails : BaseEntity
     {
-
         public Request RequestId { get; set; }
 
         public Asset AssetId { get; set; }
