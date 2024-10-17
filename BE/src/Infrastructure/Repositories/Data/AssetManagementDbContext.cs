@@ -4,12 +4,24 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 
 namespace ASM.Database.Data
 {
     public class AssetManagementDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public AssetManagementDbContext(DbContextOptions<AssetManagementDbContext> options) : base(options) { }
+
+        public DbSet<Asset> Asset { get; set; }
+        public DbSet<Approval> Approval { get; set; }
+        public DbSet<AssetType> AssetType { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<Maintaince> Maintaince { get; set; }
+        public DbSet<Depreciation> Depreciation { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<Request> Request { get; set; }
+        public DbSet<RequestDetails> RequestDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

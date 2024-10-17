@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\ASM.Application\ASM.Application.csproj" />
     <ProjectReference Include="..\..\Core\ASM.Services\ASM.Services.csproj" />
+    <ProjectReference Include="..\..\Core\Domain\ASM.Core.csproj" />
     <ProjectReference Include="..\..\Core\Repositories\ASM.Repositories.csproj" />
   </ItemGroup>
 
