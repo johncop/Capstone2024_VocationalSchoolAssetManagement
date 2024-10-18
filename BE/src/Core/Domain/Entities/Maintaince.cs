@@ -5,9 +5,6 @@ namespace ASM.Core.Entities
 {
     public class Maintaince : BaseEntity
     {
-        public int AssetId { get; set; }
-        public Asset Asset { get; set; }
-
         [MaxLength(500)]
         public string Description { get; set; }
 
@@ -15,6 +12,7 @@ namespace ASM.Core.Entities
 
         public DateTime MaintainceDate { get; set; }
 
-
+        public int AssetId { get; set; }
+        public Asset Asset { get; set; }
     }
 }

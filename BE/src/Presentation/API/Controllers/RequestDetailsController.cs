@@ -10,9 +10,9 @@ namespace ASM.WebApi.Controllers
     [ApiController]
     public class RequestDetailsController : BaseApi
     {
-        private IBaseService<RequestDetails> _baseService;
+        private IBaseService<LoanerRequestDetail> _baseService;
 
-        public RequestDetailsController(IBaseService<RequestDetails> baseService)
+        public RequestDetailsController(IBaseService<LoanerRequestDetail> baseService)
         {
             _baseService = baseService;
         }
@@ -21,7 +21,7 @@ namespace ASM.WebApi.Controllers
         public async Task<IResponse> GetAll()
         {
             var details = await _baseService.GetAllAsync();
-            return Success<IList<RequestDetails>>(data: details);
+            return Success<IList<LoanerRequestDetail>>(data: details);
         }
 
         [HttpGet("{id:int}")]
@@ -32,14 +32,14 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] RequestDetails details)
+        public async Task<IResponse> Create([FromBody] LoanerRequestDetail details)
         {
             var result = await _baseService.Crete(details);
             return Success(data: result.Id);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] RequestDetails details)
+        public async Task<IResponse> Update(int id, [FromBody] LoanerRequestDetail details)
         {
             var message = await _baseService.Update(id, details);
             return Success(message: message);

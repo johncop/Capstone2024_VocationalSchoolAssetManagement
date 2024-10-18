@@ -2,11 +2,8 @@
 
 namespace ASM.Core.Entities
 {
-    public class Request : BaseEntity
+    public class LoanerRequest : BaseEntity
     {
-
-        public ApplicationUser UserId { get; set; }
-
         public int Status { get; set; }
 
         public DateTime RequestDate { get; set; }

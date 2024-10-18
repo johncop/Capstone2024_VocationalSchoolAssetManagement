@@ -10,7 +10,7 @@ namespace ASM.Core.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public Request RequestId { get; set; }
+        public LoanerRequest RequestId { get; set; }
 
         public string ApprovedBy { get; set; }
 

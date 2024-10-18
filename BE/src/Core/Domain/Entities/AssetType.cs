@@ -1,15 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using ASM.Core.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASM.Core.Entities
 {
-    public class AssetType
+    public class AssetType : BaseEntity
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [MaxLength(50)]
         public string Name { get; set; }
 
@@ -18,7 +13,9 @@ namespace ASM.Core.Entities
 
         public int Quantity { get; set; }
 
-        public Category CategoryId { get; set; }
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
 
     }
 }

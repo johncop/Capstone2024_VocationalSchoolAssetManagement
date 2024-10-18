@@ -2,7 +2,7 @@
 using ASM.Application.Shared;
 using ASM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Request = ASM.Core.Entities.Request;
+using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
 namespace ASM.WebApi.Controllers
 {
@@ -10,9 +10,9 @@ namespace ASM.WebApi.Controllers
     [ApiController]
     public class RequestController : BaseApi
     {
-        private IBaseService<Request> _baseService;
+        private IBaseService<LoanerRequest> _baseService;
 
-        public RequestController(IBaseService<Request> baseService)
+        public RequestController(IBaseService<LoanerRequest> baseService)
         {
             _baseService = baseService;
         }
@@ -21,7 +21,7 @@ namespace ASM.WebApi.Controllers
         public async Task<IResponse> GetAll()
         {
             var requests = await _baseService.GetAllAsync();
-            return Success<IList<Request>>(data: requests);
+            return Success<IList<LoanerRequest>>(data: requests);
         }
 
         [HttpGet("{id:int}")]
@@ -32,14 +32,14 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] Request request)
+        public async Task<IResponse> Create([FromBody] LoanerRequest request)
         {
             var result = await _baseService.Crete(request);
             return Success(data: result.Id);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] Request request)
+        public async Task<IResponse> Update(int id, [FromBody] LoanerRequest request)
         {
             var message = await _baseService.Update(id, request);
             return Success(message: message);

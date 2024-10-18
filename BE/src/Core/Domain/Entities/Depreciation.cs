@@ -5,8 +5,6 @@ namespace ASM.Core.Entities
 {
     public class Depreciation : BaseEntity
     {
-        public Asset AssetId { get; set; }
-
         public DateTime PurchaseDate { get; set; }
 
         public int PurchaseValue { get; set; }
@@ -21,6 +19,9 @@ namespace ASM.Core.Entities
         public int CurrentValue { get; set; }
 
         public int Year { get; set; }
+
+        public int AssetId { get; set; }
+        public Asset Asset { get; set; }
 
     }
 }

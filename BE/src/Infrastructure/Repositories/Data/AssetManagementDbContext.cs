@@ -20,8 +20,8 @@ namespace ASM.Database.Data
         public DbSet<Maintaince> Maintaince { get; set; }
         public DbSet<Depreciation> Depreciation { get; set; }
         public DbSet<Notification> Notification { get; set; }
-        public DbSet<Request> Request { get; set; }
-        public DbSet<RequestDetails> RequestDetails { get; set; }
+        public DbSet<LoanerRequest> Request { get; set; }
+        public DbSet<LoanerRequestDetail> RequestDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
