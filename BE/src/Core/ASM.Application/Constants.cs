@@ -142,15 +142,6 @@
                 public const string EmailEmpty = "Please enter your email.";
             }
         }
-
-        public static class BookingHandling
-        {
-            public static class Messages
-            {
-                public const string NotFoundBooking = "Booking Not Found. Please try again.";
-                public const string IdEmpty = "Id of booking must have value. Please try again.";
-            }
-        }
     }
 
 }

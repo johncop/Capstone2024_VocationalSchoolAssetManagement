@@ -43,11 +43,11 @@ namespace ASM.Services.Services
             var entityObj = _queryRepository.Find(x => x.Id == id).FirstOrDefault();
             if (entity == null)
             {
-                throw new Exception(nameof(entity) + "Is Not Exist");
+                return nameof(entity) + "Is Not Exist";
             }
             _commandRepository.Update(entities: entity);
             await _unitOfWork.SaveChangesAsync();
-            return "";
+            return "Update successful.";
         }
         public async Task<string> Delete(int id)
         {
