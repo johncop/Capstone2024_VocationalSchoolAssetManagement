@@ -13,7 +13,15 @@ namespace ASM.Core.Entities
         public string Condition { get; set; }
 
         public int Status { get; set; }
-        public AssetType AssetTypeId { get; set; }
-        public Inventory InventoryId { get; set; }
+
+        #region CONFIG RELATIONSHIP
+        public int AssetTypeId { get; set; }
+        public AssetType AssetType { get; set; }
+
+        public int InventoryId { get; set; }
+        public Inventory Inventory { get; set; }
+        public ICollection<Depreciation> Depreciations { get; set; }
+        public ICollection<Maintaince> Maintainces { get; set; }
+        #endregion
     }
 }

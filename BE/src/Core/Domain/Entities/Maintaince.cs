@@ -12,7 +12,9 @@ namespace ASM.Core.Entities
 
         public DateTime MaintainceDate { get; set; }
 
+        #region CONFIG RELATIONSHIP
         public int AssetId { get; set; }
         public Asset Asset { get; set; }
+        #endregion
     }
 }

@@ -10,5 +10,9 @@ namespace ASM.Core.Entities
 
         [MaxLength(500)]
         public string Description { get; set; }
+
+        #region CONFIG RELATIONSHIP
+        public ICollection<AssetType> AssetTypes { get; set; }
+        #endregion
     }
 }

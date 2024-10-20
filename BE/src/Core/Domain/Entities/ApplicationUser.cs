@@ -12,5 +12,10 @@ namespace ASM.Core.Entities
         public string LastName { get; set; }
 
         public string Address { get; set; }
+
+        #region CONFIG RELATIONSHIP
+        public ICollection<Approval> Approvals { get; set; }
+        public ICollection<LoanerRequest> LoanerRequests { get; set; }
+        #endregion
     }
 }

@@ -20,8 +20,9 @@ namespace ASM.Core.Entities
 
         public int Year { get; set; }
 
+        #region CONFIG RELATIONSHIP
         public int AssetId { get; set; }
         public Asset Asset { get; set; }
-
+        #endregion
     }
 }

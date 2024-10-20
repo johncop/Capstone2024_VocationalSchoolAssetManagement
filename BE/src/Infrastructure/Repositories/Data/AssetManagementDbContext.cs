@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 
 namespace ASM.Database.Data
 {
@@ -12,16 +11,16 @@ namespace ASM.Database.Data
     {
         public AssetManagementDbContext(DbContextOptions<AssetManagementDbContext> options) : base(options) { }
 
-        public DbSet<Asset> Asset { get; set; }
-        public DbSet<Approval> Approval { get; set; }
-        public DbSet<AssetType> AssetType { get; set; }
-        public DbSet<Category> Category { get; set; }
-        public DbSet<Inventory> Inventory { get; set; }
-        public DbSet<Maintaince> Maintaince { get; set; }
-        public DbSet<Depreciation> Depreciation { get; set; }
-        public DbSet<Notification> Notification { get; set; }
-        public DbSet<LoanerRequest> Request { get; set; }
-        public DbSet<LoanerRequestDetail> RequestDetails { get; set; }
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<AssetType> AssetTypes { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Maintaince> Maintainces { get; set; }
+        public DbSet<Depreciation> Depreciations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<LoanerRequest> LoanerRequests { get; set; }
+        public DbSet<LoanerRequestDetail> LoanerRequestDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

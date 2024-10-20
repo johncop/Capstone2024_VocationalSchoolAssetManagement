@@ -13,9 +13,12 @@ namespace ASM.Core.Entities
 
         public int Quantity { get; set; }
 
+        #region CONFIG RELATIONSHIP
         public int CategoryId { get; set; }
 
         public Category Category { get; set; }
 
+        public ICollection<Asset> Assets { get; set; }
+        #endregion
     }
 }

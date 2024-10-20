@@ -1,20 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ASM.Core.Entities
+﻿namespace ASM.Core.Entities
 {
     public class Approval
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int LoanerRequestId { get; set; }
+        public LoanerRequest LoanerRequest { get; set; }
 
-        public LoanerRequest RequestId { get; set; }
-
-        public string ApprovedBy { get; set; }
-
+        public int ApproverId { get; set; }
+        public ApplicationUser Approver { get; set; }
         public DateTime ApprovalDate { get; set; }
-
     }
 }
