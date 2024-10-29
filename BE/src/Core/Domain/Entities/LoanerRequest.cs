@@ -17,6 +17,7 @@ namespace ASM.Core.Entities
         public ApplicationUser Requester { get; set; }
         public ICollection<LoanerRequestDetail> LoanerRequestDetails { get; set; }
         public ICollection<Approval> Approvals { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
         #endregion
     }
 }

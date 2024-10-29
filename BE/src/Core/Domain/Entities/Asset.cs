@@ -22,6 +22,8 @@ namespace ASM.Core.Entities
         public Inventory Inventory { get; set; }
         public ICollection<Depreciation> Depreciations { get; set; }
         public ICollection<Maintaince> Maintainces { get; set; }
+        public ICollection<AssetTransaction> Transactions { get; set; }
+        public ICollection<AssetImage> Images { get; set; }
         #endregion
     }
 }
