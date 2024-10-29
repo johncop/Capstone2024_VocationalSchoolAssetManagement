@@ -1,14 +1,16 @@
 ﻿using ASM.Core.Entities.Common;
 using ASM.Repositories.Interfaces;
 using ASM.Services.Interfaces;
+using AutoMapper;
 
 namespace ASM.Services.Services
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity
     {
-        protected readonly IQueryRepository<TEntity> _queryRepository;
-        protected readonly ICommandRepository<TEntity> _commandRepository;
-        protected readonly IUnitOfWork _unitOfWork;
+        private readonly IQueryRepository<TEntity> _queryRepository;
+        private readonly ICommandRepository<TEntity> _commandRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public BaseService(IQueryRepository<TEntity> queryRepository, ICommandRepository<TEntity> commandRepository, IUnitOfWork unitOfWork)
         {
@@ -22,9 +24,9 @@ namespace ASM.Services.Services
             return _queryRepository.GetAll();
         }
 
-        public async Task<IList<TEntity>> GetAllAsync()
+        public async Task<IList<TResponse>> GetAllAsync<TResponse>()
         {
-            return await _queryRepository.GetAllAsync();
+            return await _queryRepository.GetAllAsync<TResponse>();
         }
 
         public IQueryable<TEntity> Find(int id)

@@ -1,7 +1,9 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Maintaince;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,17 +15,15 @@ namespace ASM.WebApi.Controllers
     {
         private IBaseService<Maintaince> _baseService;
 
-        public MaintainceController(IBaseService<Maintaince> baseService)
+        public MaintainceController(IBaseService<Maintaince> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var maintainces = await _baseService.GetAllAsync();
-            return Success<IList<Maintaince>>(data: maintainces);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<MaintainceResponseDTO>>(data: await _baseService.GetAllAsync<MaintainceResponseDTO>());
+
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)

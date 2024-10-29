@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using AutoMapper;
 
 namespace ASM.Application.Shared
 {
     [ApiController]
-    public class BaseApi : ControllerBase
+    public class BaseApi(IMapper mapper) : ControllerBase
     {
+        protected readonly IMapper _mapper = mapper;
+
         protected Response<T> Success<T>(string message = Constants.RequestHandling.Messages.Success,
             HttpStatusCode statusCode = HttpStatusCode.OK, T data = default)
         {

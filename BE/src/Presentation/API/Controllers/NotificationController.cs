@@ -1,7 +1,9 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Notification;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASM.WebApi.Controllers
@@ -12,17 +14,15 @@ namespace ASM.WebApi.Controllers
     {
         private IBaseService<Notification> _baseService;
 
-        public NotificationController(IBaseService<Notification> baseService)
+        public NotificationController(IBaseService<Notification> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var notifications = await _baseService.GetAllAsync();
-            return Success<IList<Notification>>(data: notifications);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<NotificationResponseDTO>>(data: await _baseService.GetAllAsync<NotificationResponseDTO>());
+
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)

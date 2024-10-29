@@ -1,7 +1,9 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Asset;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASM.WebApi.Controllers
@@ -12,17 +14,14 @@ namespace ASM.WebApi.Controllers
     {
         private IBaseService<AssetType> _baseService;
 
-        public AssetTypeController(IBaseService<AssetType> baseService)
+        public AssetTypeController(IBaseService<AssetType> baseService, IMapper mapper) : base (mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var type = await _baseService.GetAllAsync();
-            return Success<IList<AssetType>>(data: type);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<AssetTypeResponseDTO>>(data: await _baseService.GetAllAsync<AssetTypeResponseDTO>());
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)

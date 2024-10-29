@@ -2,6 +2,8 @@
 using ASM.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace ASM.Repositories.Repositories
 {
@@ -9,11 +11,13 @@ namespace ASM.Repositories.Repositories
     {
         protected readonly AssetManagementDbContext _dbContext;
         protected readonly DbSet<TEntity> _dbSet;
+        private readonly IConfigurationProvider _config;
 
-        public QueryRepository(AssetManagementDbContext dbContext)
+        public QueryRepository(AssetManagementDbContext dbContext, IConfigurationProvider config)
         {
             _dbContext = dbContext;
             _dbSet = dbContext.Set<TEntity>();
+            _config = config;
         }
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>>? filter = null, Expression<Func<TEntity, object>>? includeEntities = null, bool disableChangeTracker = true)
@@ -26,9 +30,9 @@ namespace ASM.Repositories.Repositories
             return InitQuery(filter, includeEntities, disableChangeTracker).ToList();
         }
 
-        public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, Expression<Func<TEntity, object>>? includeEntities = null, bool disableChangeTracker = true)
+        public async Task<IList<T>> GetAllAsync<T>(Expression<Func<TEntity, bool>>? filter = null, Expression<Func<TEntity, object>>? includeEntities = null, bool disableChangeTracker = true)
         {
-            return await InitQuery(filter, includeEntities, disableChangeTracker).ToListAsync();
+            return await InitQuery(filter, includeEntities, disableChangeTracker).ProjectTo<T>(_config).ToListAsync();
         }
 
         public IQueryable<TEntity> InitQuery(Expression<Func<TEntity, bool>>? filter = null, Expression<Func<TEntity, object>>? includeEntities = null, bool disableChangeTracker = true)

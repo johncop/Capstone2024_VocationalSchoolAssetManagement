@@ -1,8 +1,11 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Asset;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASM.WebApi.Controllers
 {
@@ -12,24 +15,18 @@ namespace ASM.WebApi.Controllers
     {
         private IBaseService<Asset> _baseService;
 
-        public AssetController(IBaseService<Asset> baseService)
+        public AssetController(IBaseService<Asset> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var assets = await _baseService.GetAllAsync();
-            return Success<IList<Asset>>(data: assets);
-        }
+        public async Task<IResponse> GetAll() => Success<IList<AssetResponseDTO>>(data: await _baseService.GetAllAsync<AssetResponseDTO>());
 
         [HttpGet("{id:int}")]
-        public IResponse Get(int id)
-        {
-            var asset = _baseService.Find(id);
-            return Success<IQueryable>(data: asset);
-        }
+        public async Task<IResponse> Get(int id) =>
+            Success<AssetResponseDTO>(
+                data: _mapper.Map<AssetResponseDTO>(await _baseService.Find(id).FirstOrDefaultAsync()));
 
         [HttpPost]
         public async Task<IResponse> Create([FromBody] Asset asset)

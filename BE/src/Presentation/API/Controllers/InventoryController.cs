@@ -1,7 +1,9 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Inventory;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASM.WebApi.Controllers
@@ -12,17 +14,14 @@ namespace ASM.WebApi.Controllers
     {
         private IBaseService<Inventory> _baseService;
 
-        public InventoryController(IBaseService<Inventory> baseService)
+        public InventoryController(IBaseService<Inventory> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var assets = await _baseService.GetAllAsync();
-            return Success<IList<Inventory>>(data: assets);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<InventoryResponseDTO>>(data: await _baseService.GetAllAsync<InventoryResponseDTO>());
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)

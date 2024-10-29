@@ -4,7 +4,7 @@
     {
         #region Query
         IList<TEntity> GetAll();
-        Task<IList<TEntity>> GetAllAsync();
+        Task<IList<TResponse>> GetAllAsync<TResponse>();
         IQueryable<TEntity> Find(int id);
         #endregion
 

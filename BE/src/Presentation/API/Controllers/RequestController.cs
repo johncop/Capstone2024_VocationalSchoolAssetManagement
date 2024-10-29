@@ -1,28 +1,27 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Request;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
 namespace ASM.WebApi.Controllers
 {
-    [Route("api/request")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class RequestController : BaseApi
+    public class LoanerRequestController : BaseApi
     {
         private IBaseService<LoanerRequest> _baseService;
 
-        public RequestController(IBaseService<LoanerRequest> baseService)
+        public LoanerRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var requests = await _baseService.GetAllAsync();
-            return Success<IList<LoanerRequest>>(data: requests);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<LoanerRequestReponseDTO>>(data: await _baseService.GetAllAsync<LoanerRequestReponseDTO>());
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)

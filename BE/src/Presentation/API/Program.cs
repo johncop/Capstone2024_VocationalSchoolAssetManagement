@@ -4,6 +4,7 @@ using ASM.Database.Data;
 using ASM.Repositories;
 using ASM.Services.Interfaces;
 using ASM.Services.Services;
+using ASM.WebApi.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,9 @@ services.AddIdentityCore<ApplicationUser>()
 
 //Config services
 services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
+
+//Config AutoMapper
+services.AddAutoMapper(typeof(ConfigMapper));
 
 var app = builder.Build();
 
