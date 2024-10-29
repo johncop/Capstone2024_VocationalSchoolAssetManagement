@@ -21,6 +21,10 @@ namespace ASM.Database.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<LoanerRequest> LoanerRequests { get; set; }
         public DbSet<LoanerRequestDetail> LoanerRequestDetails { get; set; }
+        public DbSet<AssetImage> AssetImages { get; set; }
+        public DbSet<MaintainceImage> MaintainceImages { get; set; }
+        public DbSet<DepreciationImage> DepreciationImages { get; set; }
+        public DbSet<AssetTransaction> AssetTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
