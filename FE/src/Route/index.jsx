@@ -8,7 +8,6 @@ import { authRoutes } from './AuthRoutes';
 import LayoutRoutes from '../Route/LayoutRoutes';
 import Signin from '../Auth/Signin';
 import PrivateRoute from './PrivateRoute';
-import { classes } from '../Data/Layouts';
 
 // setup fake backend
 configureFakeBackend();
@@ -16,8 +15,6 @@ const Routers = () => {
   const login = useState(JSON.parse(localStorage.getItem('login')))[0];
   const [authenticated, setAuthenticated] = useState(false);
   const jwt_token = localStorage.getItem('token');
-  const defaultLayoutObj = classes.find((item) => Object.values(item).pop(1) === 'compact-wrapper');
-  const layout = localStorage.getItem('layout') || Object.keys(defaultLayoutObj).pop();
 
   useEffect(() => {
     let abortController = new AbortController();
@@ -39,8 +36,8 @@ const Routers = () => {
           <Route path={'/'} element={<PrivateRoute />}>
             {login || authenticated || jwt_token ? (
               <>
-                <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/${layout}`} />} />
-                <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/${layout}`} />} />
+                <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/`} />} />
+                <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/`} />} />
               </>
             ) : (
               ''

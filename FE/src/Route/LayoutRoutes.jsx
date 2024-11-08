@@ -10,9 +10,9 @@ const LayoutRoutes = () => {
       <Routes>
         {routes.map(({ path, Component }, i) => (
           <Fragment key={i}>
-          <Route element={<AppLayout />} key={i}>
-            <Route path={path} element={Component} />
-          </Route>
+            <Route element={<AppLayout />} key={i}>
+              <Route path={path} element={Component} />
+            </Route>
           </Fragment>
         ))}
       </Routes>

@@ -377,7 +377,7 @@ export const ActivityHoursChartData = {
       },
       labels: {
         formatter: function (val) {
-          return val + ' ' + 'Hr';
+          return `${val} Hr`;
         },
         style: {
           fontSize: '12px',

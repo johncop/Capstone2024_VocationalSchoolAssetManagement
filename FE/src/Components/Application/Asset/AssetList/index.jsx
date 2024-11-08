@@ -4,7 +4,7 @@ import HeaderCard from "../../../Common/Component/HeaderCard"
 import { ProductListDesc, ProductListTitle } from "../../../../Constant"
 import { AssetDataTable } from "./AssetDataTable"
 
-export const AssetList = () => {
+const AssetList = () => {
     return (
         <Fragment>
             <Breadcrumb parent="Application" title="Asset List" mainTitle="Asset List" />
@@ -23,3 +23,4 @@ export const AssetList = () => {
         </Fragment>
     )
 }
+export default AssetList;
