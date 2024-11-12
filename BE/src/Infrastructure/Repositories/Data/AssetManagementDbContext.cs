@@ -1,5 +1,5 @@
-﻿using ASM.Domain.Entities;
-using Domain.Entities.Common;
+﻿using ASM.Core.Entities;
+using ASM.Core.Entities.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +10,17 @@ namespace ASM.Database.Data
     public class AssetManagementDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public AssetManagementDbContext(DbContextOptions<AssetManagementDbContext> options) : base(options) { }
+
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<AssetType> AssetTypes { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Maintaince> Maintainces { get; set; }
+        public DbSet<Depreciation> Depreciations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<LoanerRequest> LoanerRequests { get; set; }
+        public DbSet<LoanerRequestDetail> LoanerRequestDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

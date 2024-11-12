@@ -1,5 +1,5 @@
 ﻿using ASM.Application.Helper;
-using ASM.Domain.Entities.Enum;
+using ASM.Core.Entities.Enum;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Formatters;

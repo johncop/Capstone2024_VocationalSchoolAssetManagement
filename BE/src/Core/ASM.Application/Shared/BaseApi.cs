@@ -18,7 +18,7 @@ namespace ASM.Application.Shared
             return new Response(message, statusCode);
         }
 
-        protected Response Erorr(string message, HttpStatusCode httpStatusCode)
+        protected Response Error(string message, HttpStatusCode httpStatusCode)
         {
             return new Response(message, httpStatusCode);
         }

@@ -1,4 +1,4 @@
-﻿namespace ASM.Domain.Entities.Enum
+﻿namespace ASM.Core.Entities.Enum
 {
     public enum RoleCollection
     {
