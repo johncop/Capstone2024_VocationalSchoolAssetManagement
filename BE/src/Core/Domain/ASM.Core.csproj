@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="BindingModels\" />
-    <Folder Include="DTOs\" />
   </ItemGroup>
 
 </Project>

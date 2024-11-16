@@ -23,6 +23,11 @@
                 }
             }
 
+            public static class Code
+            {
+                public const string NullUser = "NullUser";
+            }
+
             public static class Messages
             {
                 public const string MissingCORSConfigurations = "CORS configurations for this API are missing.";
@@ -120,6 +125,7 @@
             public static class Messages
             {
                 public const string NotFoundUser = "Not found user";
+                public const string NotFoundUserId = "Not found userId";
                 public const string UpdatePassword = "You have been request reset password. Please update your password and login again!";
                 public const string IsValid = "Username/Email or password is incorrect. Please try again";
                 public const string IsNotAllowed = "You need confirm your email and login again!";
@@ -141,6 +147,13 @@
                 public const string ForgotPassword = "New password was sent your email. Please check and login again.";
                 public const string EmailEmpty = "Please enter your email.";
             }
+        }
+        public class SmtpInfo
+        {
+            public const string SMTP_SERVER = "smtp.gmail.com";
+            public const int SMTP_PORT = 587;
+            public const string SMTP_USER = "uyennguyen0721@gmail.com";
+            public const string SMTP_PASS = "fxzg wwoz fpmo btdh";
         }
     }
 
