@@ -23,6 +23,8 @@ namespace ASM.Core.Entities
         #region CONFIG RELATIONSHIP
         public int AssetId { get; set; }
         public Asset Asset { get; set; }
+        public ICollection<Depreciation> Depreciations { get; set; }
+        public ICollection<DepreciationImage> Images { get; set; }
         #endregion
     }
 }

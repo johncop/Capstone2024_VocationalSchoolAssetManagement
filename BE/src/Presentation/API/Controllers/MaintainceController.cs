@@ -1,29 +1,28 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Maintaince;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASM.WebApi.Controllers
 {
     [Route("api/maintaince")]
     [ApiController]
-    public class MaintainceController : BaseApi
+    public class MaintenanceController : BaseApi
     {
-        private IBaseService<Maintaince> _baseService;
+        private IBaseService<Maintenance> _baseService;
 
-        public MaintainceController(IBaseService<Maintaince> baseService)
+        public MaintenanceController(IBaseService<Maintenance> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var maintainces = await _baseService.GetAllAsync();
-            return Success<IList<Maintaince>>(data: maintainces);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<MaintainceResponseDTO>>(data: await _baseService.GetAllAsync<MaintainceResponseDTO>());
+
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)
@@ -33,14 +32,14 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] Maintaince maintaince)
+        public async Task<IResponse> Create([FromBody] Maintenance maintaince)
         {
             var result = await _baseService.Crete(maintaince);
             return Success(data: result.Id);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] Maintaince maintaince)
+        public async Task<IResponse> Update(int id, [FromBody] Maintenance maintaince)
         {
             var message = await _baseService.Update(id, maintaince);
             return Success(message: message);

@@ -1,5 +1,6 @@
 ﻿using ASM.Core.Entities.Common;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 
 namespace ASM.Core.Entities
 {
@@ -20,5 +21,6 @@ namespace ASM.Core.Entities
 
         public int UserId { get; set; }
         public ApplicationUser User { get; set; }
+        public LoanerRequest LoanerRequest { get; set; }
     }
 }

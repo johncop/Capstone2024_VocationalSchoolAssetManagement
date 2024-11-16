@@ -1,18 +1,11 @@
-<<<<<<< HEAD
-using ASM.Application;
-=======
 ﻿using ASM.Application;
 using ASM.Application.Helper;
->>>>>>> origin/DucBE
 using ASM.Core.Entities;
 using ASM.Database.Data;
 using ASM.Repositories;
 using ASM.Services.Interfaces;
 using ASM.Services.Services;
-<<<<<<< HEAD
-=======
 using Microsoft.AspNetCore.Authentication.JwtBearer;
->>>>>>> origin/DucBE
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

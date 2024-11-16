@@ -1,7 +1,9 @@
 ﻿using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.DTOs.Depreciation;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASM.WebApi.Controllers
@@ -12,17 +14,14 @@ namespace ASM.WebApi.Controllers
     {
         private IBaseService<Depreciation> _baseService;
 
-        public DepreciationController(IBaseService<Depreciation> baseService)
+        public DepreciationController(IBaseService<Depreciation> baseService, IMapper mapper): base(mapper)
         {
             _baseService = baseService;
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
-        {
-            var depreciations = await _baseService.GetAllAsync();
-            return Success<IList<Depreciation>>(data: depreciations);
-        }
+        public async Task<IResponse> GetAll() =>
+            Success<IList<DepreciationResponseDTO>>(data: await _baseService.GetAllAsync<DepreciationResponseDTO>());
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)
