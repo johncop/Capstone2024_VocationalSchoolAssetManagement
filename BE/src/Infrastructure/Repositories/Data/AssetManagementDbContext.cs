@@ -16,13 +16,13 @@ namespace ASM.Database.Data
         public DbSet<AssetType> AssetTypes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
-        public DbSet<Maintaince> Maintainces { get; set; }
+        public DbSet<Maintenance> Maintenances { get; set; }
         public DbSet<Depreciation> Depreciations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<LoanerRequest> LoanerRequests { get; set; }
         public DbSet<LoanerRequestDetail> LoanerRequestDetails { get; set; }
         public DbSet<AssetImage> AssetImages { get; set; }
-        public DbSet<MaintainceImage> MaintainceImages { get; set; }
+        public DbSet<MaintenanceImage> MaintenanceImages { get; set; }
         public DbSet<DepreciationImage> DepreciationImages { get; set; }
         public DbSet<AssetTransaction> AssetTransactions { get; set; }
 

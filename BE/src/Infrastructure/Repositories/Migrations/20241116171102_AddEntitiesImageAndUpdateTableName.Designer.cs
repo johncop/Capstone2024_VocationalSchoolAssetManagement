@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASM.Database.Migrations
 {
     [DbContext(typeof(AssetManagementDbContext))]
-    [Migration("20241017095927_InitialEntities")]
-    partial class InitialEntities
+    [Migration("20241116171102_AddEntitiesImageAndUpdateTableName")]
+    partial class AddEntitiesImageAndUpdateTableName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,26 +106,20 @@ namespace ASM.Database.Migrations
 
             modelBuilder.Entity("ASM.Core.Entities.Approval", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("LoanerRequestId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("ApproverId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ApprovedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("LoanerRequestId", "ApproverId");
 
-                    b.Property<int?>("RequestIdId")
-                        .HasColumnType("int");
+                    b.HasIndex("ApproverId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("RequestIdId");
-
-                    b.ToTable("Approval");
+                    b.ToTable("Approvals");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.Asset", b =>
@@ -136,7 +130,7 @@ namespace ASM.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AssetTypeIdId")
+                    b.Property<int>("AssetTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Condition")
@@ -146,7 +140,7 @@ namespace ASM.Database.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("InventoryIdId")
+                    b.Property<int>("InventoryId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -167,11 +161,86 @@ namespace ASM.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetTypeIdId");
+                    b.HasIndex("AssetTypeId");
 
-                    b.HasIndex("InventoryIdId");
+                    b.HasIndex("InventoryId");
 
-                    b.ToTable("Asset");
+                    b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.AssetImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("AssetImages");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.AssetTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrentLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RecordDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("AssetTransactions");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.AssetType", b =>
@@ -182,12 +251,18 @@ namespace ASM.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryIdId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
@@ -196,11 +271,14 @@ namespace ASM.Database.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryIdId");
+                    b.HasIndex("CategoryId");
 
-                    b.ToTable("AssetType");
+                    b.ToTable("AssetTypes");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.Category", b =>
@@ -218,6 +296,9 @@ namespace ASM.Database.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int?>("InventoryId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -230,7 +311,9 @@ namespace ASM.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.HasIndex("InventoryId");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.Depreciation", b =>
@@ -244,13 +327,16 @@ namespace ASM.Database.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AssetIdId")
+                    b.Property<int>("AssetId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CurrentValue")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DepreciationId")
                         .HasColumnType("int");
 
                     b.Property<string>("DepreciationRate")
@@ -277,9 +363,44 @@ namespace ASM.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetIdId");
+                    b.HasIndex("AssetId");
 
-                    b.ToTable("Depreciation");
+                    b.HasIndex("DepreciationId");
+
+                    b.ToTable("Depreciations");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.DepreciationImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DepreciationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepreciationId");
+
+                    b.ToTable("DepreciationImages");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.Inventory", b =>
@@ -289,12 +410,6 @@ namespace ASM.Database.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AssetTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryIdId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -318,96 +433,10 @@ namespace ASM.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetTypeId");
-
-                    b.HasIndex("CategoryIdId");
-
-                    b.ToTable("Inventory");
+                    b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("ASM.Core.Entities.Maintaince", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AssetId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("MaintainceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetId");
-
-                    b.ToTable("Maintaince");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiredAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UserIdId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserIdId");
-
-                    b.ToTable("Notification");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.Request", b =>
+            modelBuilder.Entity("ASM.Core.Entities.LoanerRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -430,23 +459,48 @@ namespace ASM.Database.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RequesterId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserIdId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserIdId");
+                    b.HasIndex("RequesterId");
 
-                    b.ToTable("Request");
+                    b.ToTable("LoanerRequests");
                 });
 
-            modelBuilder.Entity("ASM.Core.Entities.RequestDetails", b =>
+            modelBuilder.Entity("ASM.Core.Entities.LoanerRequestDetail", b =>
+                {
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LoanerRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConditionOnReturn")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("AssetId", "LoanerRequestId");
+
+                    b.HasIndex("LoanerRequestId");
+
+                    b.ToTable("LoanerRequestDetails");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Maintenance", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -454,38 +508,116 @@ namespace ASM.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AssetIdId")
+                    b.Property<int>("AssetId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ConditionOnReturn")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestIdId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime>("MaintenanceDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetIdId");
+                    b.HasIndex("AssetId");
 
-                    b.HasIndex("RequestIdId");
+                    b.ToTable("Maintenances");
+                });
 
-                    b.ToTable("RequestDetails");
+            modelBuilder.Entity("ASM.Core.Entities.MaintenanceImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaintenanceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaintenanceId");
+
+                    b.ToTable("MaintenanceImages");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("LoanerRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoanerRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -623,65 +755,46 @@ namespace ASM.Database.Migrations
 
             modelBuilder.Entity("ASM.Core.Entities.Approval", b =>
                 {
-                    b.HasOne("ASM.Core.Entities.Request", "RequestId")
-                        .WithMany()
-                        .HasForeignKey("RequestIdId");
+                    b.HasOne("ASM.Core.Entities.ApplicationUser", "Approver")
+                        .WithMany("Approvals")
+                        .HasForeignKey("ApproverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("RequestId");
+                    b.HasOne("ASM.Core.Entities.LoanerRequest", "LoanerRequest")
+                        .WithMany("Approvals")
+                        .HasForeignKey("LoanerRequestId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("LoanerRequest");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.Asset", b =>
                 {
-                    b.HasOne("ASM.Core.Entities.AssetType", "AssetTypeId")
-                        .WithMany()
-                        .HasForeignKey("AssetTypeIdId");
-
-                    b.HasOne("ASM.Core.Entities.Inventory", "InventoryId")
-                        .WithMany()
-                        .HasForeignKey("InventoryIdId");
-
-                    b.Navigation("AssetTypeId");
-
-                    b.Navigation("InventoryId");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.AssetType", b =>
-                {
-                    b.HasOne("ASM.Core.Entities.Category", "CategoryId")
-                        .WithMany()
-                        .HasForeignKey("CategoryIdId");
-
-                    b.Navigation("CategoryId");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.Depreciation", b =>
-                {
-                    b.HasOne("ASM.Core.Entities.Asset", "AssetId")
-                        .WithMany()
-                        .HasForeignKey("AssetIdId");
-
-                    b.Navigation("AssetId");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.Inventory", b =>
-                {
                     b.HasOne("ASM.Core.Entities.AssetType", "AssetType")
-                        .WithMany()
-                        .HasForeignKey("AssetTypeId");
+                        .WithMany("Assets")
+                        .HasForeignKey("AssetTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ASM.Core.Entities.Category", "CategoryId")
-                        .WithMany()
-                        .HasForeignKey("CategoryIdId");
+                    b.HasOne("ASM.Core.Entities.Inventory", "Inventory")
+                        .WithMany("Assets")
+                        .HasForeignKey("InventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AssetType");
 
-                    b.Navigation("CategoryId");
+                    b.Navigation("Inventory");
                 });
 
-            modelBuilder.Entity("ASM.Core.Entities.Maintaince", b =>
+            modelBuilder.Entity("ASM.Core.Entities.AssetImage", b =>
                 {
                     b.HasOne("ASM.Core.Entities.Asset", "Asset")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -689,37 +802,128 @@ namespace ASM.Database.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("ASM.Core.Entities.AssetTransaction", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Asset", "Asset")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.AssetType", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Category", "Category")
+                        .WithMany("AssetTypes")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Category", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Inventory", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("InventoryId");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Depreciation", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Asset", "Asset")
+                        .WithMany("Depreciations")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASM.Core.Entities.Depreciation", null)
+                        .WithMany("Depreciations")
+                        .HasForeignKey("DepreciationId");
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.DepreciationImage", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Depreciation", "Depreciation")
+                        .WithMany("Images")
+                        .HasForeignKey("DepreciationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Depreciation");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.LoanerRequest", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.ApplicationUser", "Requester")
+                        .WithMany("LoanerRequests")
+                        .HasForeignKey("RequesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Requester");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.LoanerRequestDetail", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASM.Core.Entities.LoanerRequest", "LoanerRequest")
+                        .WithMany("LoanerRequestDetails")
+                        .HasForeignKey("LoanerRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("LoanerRequest");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Maintenance", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Asset", "Asset")
+                        .WithMany("Maintainces")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.MaintenanceImage", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Maintenance", "Maintenance")
+                        .WithMany("Images")
+                        .HasForeignKey("MaintenanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Maintenance");
+                });
+
             modelBuilder.Entity("ASM.Core.Entities.Notification", b =>
                 {
-                    b.HasOne("ASM.Core.Entities.ApplicationUser", "UserId")
+                    b.HasOne("ASM.Core.Entities.LoanerRequest", "LoanerRequest")
+                        .WithMany("Notifications")
+                        .HasForeignKey("LoanerRequestId");
+
+                    b.HasOne("ASM.Core.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserIdId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("UserId");
-                });
+                    b.Navigation("LoanerRequest");
 
-            modelBuilder.Entity("ASM.Core.Entities.Request", b =>
-                {
-                    b.HasOne("ASM.Core.Entities.ApplicationUser", "UserId")
-                        .WithMany()
-                        .HasForeignKey("UserIdId");
-
-                    b.Navigation("UserId");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.RequestDetails", b =>
-                {
-                    b.HasOne("ASM.Core.Entities.Asset", "AssetId")
-                        .WithMany()
-                        .HasForeignKey("AssetIdId");
-
-                    b.HasOne("ASM.Core.Entities.Request", "RequestId")
-                        .WithMany()
-                        .HasForeignKey("RequestIdId");
-
-                    b.Navigation("AssetId");
-
-                    b.Navigation("RequestId");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -771,6 +975,62 @@ namespace ASM.Database.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Approvals");
+
+                    b.Navigation("LoanerRequests");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Asset", b =>
+                {
+                    b.Navigation("Depreciations");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("Maintainces");
+
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.AssetType", b =>
+                {
+                    b.Navigation("Assets");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Category", b =>
+                {
+                    b.Navigation("AssetTypes");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Depreciation", b =>
+                {
+                    b.Navigation("Depreciations");
+
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Inventory", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.LoanerRequest", b =>
+                {
+                    b.Navigation("Approvals");
+
+                    b.Navigation("LoanerRequestDetails");
+
+                    b.Navigation("Notifications");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.Maintenance", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
