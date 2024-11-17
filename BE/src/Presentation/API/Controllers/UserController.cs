@@ -2,6 +2,7 @@
 using ASM.Core.DTOs;
 using ASM.Core.Entities;
 using ASM.Database.Data;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,10 @@ namespace ASM.WebApi.Controllers
         private readonly AssetManagementDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
         public UserController(AssetManagementDbContext context,
                UserManager<ApplicationUser> userManager,
-               SignInManager<ApplicationUser> signInManager)
+               SignInManager<ApplicationUser> signInManager,
+               IMapper mapper) : base(mapper)
         {
             _context = context;
             _userManager = userManager;
