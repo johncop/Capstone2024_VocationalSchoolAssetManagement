@@ -1,5 +1,7 @@
-﻿using ASM.Application.Base.Interfaces;
+﻿using System.Net;
+using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Asset;
 using ASM.Core.DTOs.Asset;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
@@ -13,7 +15,7 @@ namespace ASM.WebApi.Controllers
     [Route("api/asset")]
     public class AssetController : BaseApi
     {
-        private IBaseService<Asset> _baseService;
+        private readonly IBaseService<Asset> _baseService;
 
         public AssetController(IBaseService<Asset> baseService, IMapper mapper) : base(mapper)
         {
@@ -29,17 +31,24 @@ namespace ASM.WebApi.Controllers
                 data: _mapper.Map<AssetResponseDTO>(await _baseService.Find(id).FirstOrDefaultAsync()));
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] Asset asset)
+        public async Task<IResponse> Create([FromBody] CreateAssetBindingModel asset)
         {
-            var result = await _baseService.Crete(asset);
+            var result = await _baseService.Crete(_mapper.Map<Asset>(asset));
             return Success(data: result.Id);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] Asset asset)
+        public async Task<IResponse> Update(int id, [FromBody] UpdateAssetBindingModel asset)
         {
-            var message = await _baseService.Update(id, asset);
-            return Success(message: message);
+            var assetObj = await _baseService.Find(id).FirstOrDefaultAsync();
+            if (assetObj is null)
+            {
+                return Error("Asset not found", HttpStatusCode.NotFound);
+            }
+
+            asset.Id = id;
+            var assetUpdated = await _baseService.Update(_mapper.Map<Asset>(asset));
+            return Success<AssetBindingModel>(data: _mapper.Map<AssetBindingModel>(assetUpdated));
         }
 
         [HttpDelete("{id:int}")]

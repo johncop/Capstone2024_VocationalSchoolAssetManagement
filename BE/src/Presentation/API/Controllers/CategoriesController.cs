@@ -36,21 +36,27 @@ namespace ASM.WebApi.Controllers
         [HttpPost]
         public async Task<IResponse> Create([FromBody] AddCategoryBindingModel category)
         {
-            var result = await _baseService.Crete(_mapper.Map<Category>(category));
-            return Success(data: result.Id);
+            return Success(data: _mapper.Map<CategoryResponseDTO>(await _baseService.Crete(_mapper.Map<Category>(category))));
         }
 
         [HttpPut("{id:int}")]
         public async Task<IResponse> Update(int id, [FromBody] UpdateCategoryBindingModel updateCategoryBindingModel)
         {
             updateCategoryBindingModel.Id = id;
+
+            //Find the category by id
             var category = await _baseService.Find(id).FirstOrDefaultAsync();
             if (category is null)
             {
                 return Error(message: "Not found category. Please try again.", httpStatusCode: HttpStatusCode.BadRequest);
             }
-            category = _mapper.Map<Category>(updateCategoryBindingModel);
-            return Success(message: await _baseService.Update(id, category));
+
+            // Map the updated binding model to the existing category and update it
+            _mapper.Map(updateCategoryBindingModel, category);
+            var updatedCategory = await _baseService.Update(category);
+
+            // Return the mapped response DTO with success
+            return Success<CategoryResponseDTO>(data: _mapper.Map<CategoryResponseDTO>(updatedCategory));
         }
 
         [HttpDelete("{id:int}")]

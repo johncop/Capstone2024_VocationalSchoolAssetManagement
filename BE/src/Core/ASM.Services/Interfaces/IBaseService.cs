@@ -10,7 +10,7 @@
 
         #region Command
         Task<TEntity> Crete(TEntity entity);
-        Task<string> Update(int id, TEntity entity);
+        Task<TEntity> Update(TEntity entity);
         Task<string> Delete(int id);
         #endregion
     }

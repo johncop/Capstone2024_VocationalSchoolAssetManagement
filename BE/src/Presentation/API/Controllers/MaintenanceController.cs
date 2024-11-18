@@ -1,18 +1,21 @@
-﻿using ASM.Application.Base.Interfaces;
+﻿using System.Net;
+using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Maintaince;
 using ASM.Core.DTOs.Maintaince;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASM.WebApi.Controllers
 {
-    [Route("api/maintaince")]
+    [Route("api/[controller]")]
     [ApiController]
     public class MaintenanceController : BaseApi
     {
-        private IBaseService<Maintenance> _baseService;
+        private readonly IBaseService<Maintenance> _baseService;
 
         public MaintenanceController(IBaseService<Maintenance> baseService, IMapper mapper) : base(mapper)
         {
@@ -21,7 +24,7 @@ namespace ASM.WebApi.Controllers
 
         [HttpGet]
         public async Task<IResponse> GetAll() =>
-            Success<IList<MaintainceResponseDTO>>(data: await _baseService.GetAllAsync<MaintainceResponseDTO>());
+            Success<IList<MaintenanceResponseDTO>>(data: await _baseService.GetAllAsync<MaintenanceResponseDTO>());
 
 
         [HttpGet("{id:int}")]
@@ -39,10 +42,15 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] Maintenance maintaince)
+        public async Task<IResponse> Update(int id, [FromBody] MaintenanceBindingModel updateMaintenanceBindingModel)
         {
-            var message = await _baseService.Update(id, maintaince);
-            return Success(message: message);
+            var maintenance = await _baseService.Find(id).FirstOrDefaultAsync();
+            if (maintenance is null)
+            {
+                return Error("Maintenance not found", HttpStatusCode.NotFound);
+            }
+            _mapper.Map(updateMaintenanceBindingModel, maintenance);
+            return Success(data: _mapper.Map<MaintenanceResponseDTO>(await _baseService.Update(maintenance)));
         }
 
         [HttpDelete("{id:int}")]

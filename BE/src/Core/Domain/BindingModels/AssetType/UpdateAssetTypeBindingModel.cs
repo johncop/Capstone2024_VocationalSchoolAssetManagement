@@ -1,6 +1,6 @@
 ﻿namespace ASM.Core.BindingModels.AssetType
 {
-    public class AssetTypeBindingModel
+    public class UpdateAssetTypeBindingModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

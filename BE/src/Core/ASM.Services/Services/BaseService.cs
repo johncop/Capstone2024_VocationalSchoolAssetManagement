@@ -40,16 +40,19 @@ namespace ASM.Services.Services
             await _unitOfWork.SaveChangesAsync();
             return entity;
         }
-        public async Task<string> Update(int id, TEntity entity)
+        public async Task<TEntity> Update(TEntity entity)
         {
-            var entityObj = _queryRepository.Find(x => x.Id == id).FirstOrDefault();
-            if (entity == null)
+            try
             {
-                return nameof(entity) + "Is Not Exist";
+                _commandRepository.Update(entities: entity);
+                await _unitOfWork.SaveChangesAsync();
+                return entity;
             }
-            _commandRepository.Update(entities: entity);
-            await _unitOfWork.SaveChangesAsync();
-            return "Update successful.";
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
         public async Task<string> Delete(int id)
         {

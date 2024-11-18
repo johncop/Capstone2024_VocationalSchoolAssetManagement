@@ -1,6 +1,6 @@
 ﻿namespace ASM.Core.BindingModels.Notification
 {
-    public class NotificationBindingModel
+    public class UpdateNotificationBindingModel
     {
         public int Id { get; set; }
         public string Title { get; set; }

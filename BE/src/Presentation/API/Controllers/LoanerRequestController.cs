@@ -1,18 +1,21 @@
-﻿using ASM.Application.Base.Interfaces;
+﻿using System.Net;
+using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Request;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
 namespace ASM.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/loaner-request")]
     [ApiController]
     public class LoanerRequestController : BaseApi
     {
-        private IBaseService<LoanerRequest> _baseService;
+        private readonly IBaseService<LoanerRequest> _baseService;
 
         public LoanerRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
         {
@@ -38,10 +41,16 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] LoanerRequest request)
+        public async Task<IResponse> Update(int id, [FromBody] UpdateLoanerRequestBindingModel updateLoanerRequestBindingModel)
         {
-            var message = await _baseService.Update(id, request);
-            return Success(message: message);
+            var loanerRequest = await _baseService.Find(id).FirstOrDefaultAsync();
+            if (loanerRequest is null)
+            {
+                return Error("Loaner Request Not Found", HttpStatusCode.NotFound);
+            }
+
+            _mapper.Map(updateLoanerRequestBindingModel, loanerRequest);
+            return Success(data: _mapper.Map<LoanerRequestReponseDTO>(await _baseService.Update(loanerRequest)));
         }
 
         [HttpDelete("{id:int}")]

@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using System.Text;
+using ASM.WebApi.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +46,7 @@ services.AddAuthentication(options =>
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             options.DefaultScheme = "MultiScheme";
-        }) // add default authenticationschema
+        }) // add default authentication schema
         .AddPolicyScheme("MultiScheme", "JWT or Cookie", options =>
         {
             options.ForwardDefaultSelector = context =>
@@ -111,23 +112,27 @@ services.AddScoped(typeof(IEmailService), typeof(EmailService));
 services.AddScoped(typeof(IAuthService), typeof(AuthService));
 
 services.AddHttpContextAccessor();
-
+services.AddAutoMapper(typeof(ConfigMapper));
 services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
     options.TokenLifespan = TimeSpan.FromHours(2); // Adjust as needed
 });
 
-//Config services
-services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Asser Management System API V1");
+});
+
 
 app.UseHttpsRedirection()
     .UseResponseCaching()
@@ -136,5 +141,18 @@ app.UseHttpsRedirection()
 
 app.MapControllers();
 //app.MapIdentityApi<ApplicationUser>();
+
+//Redirect to Swagger by default
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+    }
+    else
+    {
+        await next();
+    }
+});
 
 app.Run();

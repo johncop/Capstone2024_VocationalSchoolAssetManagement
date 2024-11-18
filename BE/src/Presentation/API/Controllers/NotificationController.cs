@@ -1,18 +1,21 @@
-﻿using ASM.Application.Base.Interfaces;
+﻿using System.Net;
+using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Notification;
 using ASM.Core.DTOs.Notification;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASM.WebApi.Controllers
 {
-    [Route("api/notification")]
+    [Route("api/[controller]")]
     [ApiController]
     public class NotificationController : BaseApi
     {
-        private IBaseService<Notification> _baseService;
+        private readonly IBaseService<Notification> _baseService;
 
         public NotificationController(IBaseService<Notification> baseService, IMapper mapper) : base(mapper)
         {
@@ -39,10 +42,16 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] Notification notification)
+        public async Task<IResponse> Update(int id, [FromBody] UpdateNotificationBindingModel updateNotificationBindingModel)
         {
-            var message = await _baseService.Update(id, notification);
-            return Success(message: message);
+            var notification = await _baseService.Find(id).FirstOrDefaultAsync();
+            if (notification is null)
+            {
+                return Error("Notification not found", HttpStatusCode.NotFound);
+            }
+
+            _mapper.Map(updateNotificationBindingModel, notification);
+            return Success(data: _mapper.Map<NotificationResponseDTO>(await _baseService.Update(notification)));
         }
 
         [HttpDelete("{id:int}")]
