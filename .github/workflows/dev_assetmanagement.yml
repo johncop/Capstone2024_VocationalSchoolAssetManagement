@@ -11,29 +11,37 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      # Step 1: Check out the repository
       - uses: actions/checkout@v4
         with:
           ref: dev  # Ensure the correct branch is checked out
 
-      - name: Debug:list-files
-        run: dir /s src/Presentation/API  # Debugging step to verify the file structure
+      # Step 2: Debug working directory
+      - name: Print working directory and list files
+        run: |
+          pwd
+          ls -R
 
+      # Step 3: Set up .NET Core
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
+      # Step 4: Build the project
       - name: Build with dotnet
         run: dotnet build src/Presentation/API/ASM.WebApi.csproj --configuration Release
 
+      # Step 5: Publish the project
       - name: dotnet publish
-        run: dotnet publish src/Presentation/API/ASM.WebApi.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish src/Presentation/API/ASM.WebApi.csproj -c Release -o ./publish
 
+      # Step 6: Upload artifact for deployment
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -42,14 +50,16 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
+      # Step 1: Download the build artifact
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
 
+      # Step 2: Log in to Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -57,10 +67,11 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C9627C8A8AA3B164A86696B37 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_01BD9BCFE8324C5998016B639DDCBE8A }}
 
+      # Step 3: Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'assetmanagement'
           slot-name: 'Production'
-          package: .
+          package: ./publish
