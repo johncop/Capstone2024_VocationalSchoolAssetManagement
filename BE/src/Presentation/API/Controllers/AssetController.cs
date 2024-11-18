@@ -38,17 +38,16 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] UpdateAssetBindingModel asset)
+        public async Task<IResponse> Update(int id, [FromBody] UpdateAssetBindingModel updateAssetBindingModel)
         {
-            var assetObj = await _baseService.Find(id).FirstOrDefaultAsync();
-            if (assetObj is null)
+            var asset = await _baseService.Find(id).FirstOrDefaultAsync();
+            if (asset is null)
             {
                 return Error("Asset not found", HttpStatusCode.NotFound);
             }
 
-            asset.Id = id;
-            var assetUpdated = await _baseService.Update(_mapper.Map<Asset>(asset));
-            return Success<AssetBindingModel>(data: _mapper.Map<AssetBindingModel>(assetUpdated));
+            _mapper.Map(updateAssetBindingModel, asset);
+            return Success<AssetResponseDTO>(data: _mapper.Map<AssetResponseDTO>(await _baseService.Update(asset)));
         }
 
         [HttpDelete("{id:int}")]
