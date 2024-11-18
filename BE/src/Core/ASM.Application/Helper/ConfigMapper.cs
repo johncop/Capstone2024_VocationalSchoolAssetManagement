@@ -6,6 +6,7 @@ using ASM.Core.BindingModels.Inventory;
 using ASM.Core.DTOs.Asset;
 using ASM.Core.DTOs.Category;
 using ASM.Core.DTOs.Depreciation;
+using ASM.Core.DTOs.Image;
 using ASM.Core.DTOs.Inventory;
 using ASM.Core.Entities;
 using AutoMapper;
@@ -33,7 +34,12 @@ public class ConfigMapper : Profile
             .ForMember(x => x.Condition, opt => opt.MapFrom((src, dest) => src.Condition ?? dest.Condition))
             .ForMember(x => x.Status, opt => opt.MapFrom((src, dest) => src.Status))
             .ForMember(x => x.AssetTypeId, opt => opt.MapFrom((src, dest) => src.AssetTypeId ?? dest.AssetTypeId));
-        CreateMap<Asset, AssetResponseDTO>();
+        CreateMap<Asset, AssetResponseDTO>()
+            .ForMember(x =>x.AssetImages, opt => opt.MapFrom((src) => src.Images.Select(x => new ImageResponseDTO()
+            {
+                Id = x.Id,
+                Url = x.ImageUrl
+            })));
     }
 
     private void AssetTypeConfiguration()

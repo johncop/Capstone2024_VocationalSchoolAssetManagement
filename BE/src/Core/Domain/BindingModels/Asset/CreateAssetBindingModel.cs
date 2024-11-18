@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace ASM.Core.BindingModels.Asset;
 
 public class CreateAssetBindingModel
@@ -7,4 +9,5 @@ public class CreateAssetBindingModel
     public string Condition { get; set; }
     public int Status { get; set; }
     public int AssetTypeId { get; set; }
+    public IList<IFormFile> Files { get; set; }
 }

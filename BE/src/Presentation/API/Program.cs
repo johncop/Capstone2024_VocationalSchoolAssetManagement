@@ -110,6 +110,7 @@ services.Configure<CookiePolicyOptions>(options =>
 services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 services.AddScoped(typeof(IEmailService), typeof(EmailService));
 services.AddScoped(typeof(IAuthService), typeof(AuthService));
+services.AddSingleton<IBlobService, BlobService>();
 
 services.AddHttpContextAccessor();
 services.AddAutoMapper(typeof(ConfigMapper));

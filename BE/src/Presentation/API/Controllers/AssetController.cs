@@ -9,53 +9,79 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ASM.WebApi.Controllers
+namespace ASM.WebApi.Controllers;
+
+[Route("api/[controller]")]
+public class AssetController : BaseApi
 {
+    private readonly IBaseService<Asset> _baseService;
+    private readonly IBlobService _blobService;
 
-    [Route("api/[controller]")]
-    public class AssetController : BaseApi
+    public AssetController(IBaseService<Asset> baseService, IMapper mapper, IBlobService blobService) : base(mapper)
     {
-        private readonly IBaseService<Asset> _baseService;
+        _baseService = baseService;
+        _blobService = blobService;
+    }
 
-        public AssetController(IBaseService<Asset> baseService, IMapper mapper) : base(mapper)
+    [HttpGet]
+    public async Task<IResponse> GetAll()
+    {
+        return Success<IList<AssetResponseDTO>>(data: await _baseService.GetAllAsync<AssetResponseDTO>());
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IResponse> Get(int id)
+    {
+        return Success<AssetResponseDTO>(
+            data: _mapper.Map<AssetResponseDTO>(await _baseService.Find(id).FirstOrDefaultAsync()));
+    }
+
+    [HttpPost]
+    public async Task<IResponse> Create([FromForm] CreateAssetBindingModel createAssetBindingModel)
+    {
+        if (createAssetBindingModel is null) return Error("The input is null", HttpStatusCode.BadRequest);
+
+        try
         {
-            _baseService = baseService;
-        }
-
-        [HttpGet]
-        public async Task<IResponse> GetAll() => Success<IList<AssetResponseDTO>>(data: await _baseService.GetAllAsync<AssetResponseDTO>());
-
-        [HttpGet("{id:int}")]
-        public async Task<IResponse> Get(int id) =>
-            Success<AssetResponseDTO>(
-                data: _mapper.Map<AssetResponseDTO>(await _baseService.Find(id).FirstOrDefaultAsync()));
-
-        [HttpPost]
-        public async Task<IResponse> Create([FromBody] CreateAssetBindingModel asset)
-        {
-            var result = await _baseService.Crete(_mapper.Map<Asset>(asset));
-            return Success(data: _mapper.Map<AssetResponseDTO>(result));
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] UpdateAssetBindingModel updateAssetBindingModel)
-        {
-            var asset = await _baseService.Find(id).FirstOrDefaultAsync();
-            if (asset is null)
+            var asset = _mapper.Map<Asset>(createAssetBindingModel);
+            if (createAssetBindingModel.Files is not null && createAssetBindingModel.Files.Count > 0)
             {
-                return Error("Asset not found", HttpStatusCode.NotFound);
+                asset.Images = new List<AssetImage>();
+                var uploadTask = createAssetBindingModel.Files.Select(async file =>
+                {
+                    var imageUrl = await _blobService.UploadImage(file);
+                    return new AssetImage
+                    {
+                        ImageUrl = imageUrl,
+                        ImageName = file.Name
+                    };
+                });
+                asset.Images = (await Task.WhenAll(uploadTask)).ToList();
             }
 
-            _mapper.Map(updateAssetBindingModel, asset);
-            return Success<AssetResponseDTO>(data: _mapper.Map<AssetResponseDTO>(await _baseService.Update(asset)));
+            var result = await _baseService.Crete(asset);
+            return Success(data: _mapper.Map<AssetResponseDTO>(result));
         }
-
-        [HttpDelete("{id:int}")]
-        public async Task<IResponse> Delete(int id)
+        catch (Exception ex)
         {
-            var message = await _baseService.Delete(id);
-            return Success(message : message);
+            return Error(ex.Message, HttpStatusCode.InternalServerError);
         }
+    }
 
+    [HttpPut("{id:int}")]
+    public async Task<IResponse> Update(int id, [FromBody] UpdateAssetBindingModel updateAssetBindingModel)
+    {
+        var asset = await _baseService.Find(id).FirstOrDefaultAsync();
+        if (asset is null) return Error("Asset not found", HttpStatusCode.NotFound);
+
+        _mapper.Map(updateAssetBindingModel, asset);
+        return Success<AssetResponseDTO>(data: _mapper.Map<AssetResponseDTO>(await _baseService.Update(asset)));
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IResponse> Delete(int id)
+    {
+        var message = await _baseService.Delete(id);
+        return Success(message);
     }
 }
