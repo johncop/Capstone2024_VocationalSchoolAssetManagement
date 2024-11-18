@@ -34,7 +34,7 @@ jobs:
 
       # Step 5: Publish the project
       - name: dotnet publish
-        run: dotnet publish src/Presentation/API/ASM.WebApi.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish BE/src/Presentation/API/ASM.WebApi.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       # Step 6: Upload artifact for deployment
       - name: Upload artifact for deployment job
