@@ -1,3 +1,5 @@
+using ASM.Core.DTOs.Image;
+
 namespace ASM.Core.DTOs.Asset;
 
 public class AssetResponseDTO
@@ -7,4 +9,5 @@ public class AssetResponseDTO
     public string Condition { get; set; }
     public int Status { get; set; }
     public AssetTypeResponseDTO AssetType { get; set; }
+    public IList<ImageResponseDTO> AssetImages { get; set; }
 }

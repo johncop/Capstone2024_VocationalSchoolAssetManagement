@@ -42,8 +42,6 @@ namespace ASM.WebApi.Controllers
         [HttpPut("{id:int}")]
         public async Task<IResponse> Update(int id, [FromBody] UpdateCategoryBindingModel updateCategoryBindingModel)
         {
-            updateCategoryBindingModel.Id = id;
-
             //Find the category by id
             var category = await _baseService.Find(id).FirstOrDefaultAsync();
             if (category is null)
