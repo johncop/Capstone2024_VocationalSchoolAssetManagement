@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ASM.WebApi.Controllers
 {
 
-    [Route("api/asset")]
+    [Route("api/[controller]")]
     public class AssetController : BaseApi
     {
         private readonly IBaseService<Asset> _baseService;
@@ -34,7 +34,7 @@ namespace ASM.WebApi.Controllers
         public async Task<IResponse> Create([FromBody] CreateAssetBindingModel asset)
         {
             var result = await _baseService.Crete(_mapper.Map<Asset>(asset));
-            return Success(data: result.Id);
+            return Success(data: _mapper.Map<AssetResponseDTO>(result));
         }
 
         [HttpPut("{id:int}")]
