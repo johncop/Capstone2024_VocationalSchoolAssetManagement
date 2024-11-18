@@ -39,7 +39,11 @@ public class ConfigMapper : Profile
     private void AssetTypeConfiguration()
     {
         CreateMap<CreateAssetTypeBindingModel, AssetType>();
-        CreateMap<UpdateAssetTypeBindingModel, AssetType>();
+        CreateMap<UpdateAssetTypeBindingModel, AssetType>()
+            .ForMember(x => x.Id, opt => opt.MapFrom((src, dest) => dest.Id))
+            .ForMember(x => x.Name, opt => opt.MapFrom((src, dest) => src.Name ?? dest.Name))
+            .ForMember(x => x.Description, opt => opt.MapFrom((src, dest) => src.Description ?? dest.Description))
+            .ForMember(x => x.Quantity, opt => opt.MapFrom((src, dest) => src.Quantity ?? dest.Quantity));
         CreateMap<AssetType, AssetTypeResponseDTO>()
             .ForMember(x => x.Category, opt => opt.MapFrom(src => new CategoryResponseDTO()
             {

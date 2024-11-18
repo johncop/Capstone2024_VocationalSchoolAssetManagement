@@ -41,7 +41,7 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] AssetType type)
+        public async Task<IResponse> Update(int id, [FromBody] UpdateAssetTypeBindingModel updateAssetTypeBindingModel)
         {
             var assetType = await _baseService.Find(id).FirstOrDefaultAsync();
             if (assetType is null)
@@ -49,8 +49,8 @@ namespace ASM.WebApi.Controllers
                 return Error("Asset Type not found", HttpStatusCode.NotFound);
             }
 
-            var typeUpdated = await _baseService.Update(_mapper.Map<AssetType>(type));
-            return Success<UpdateAssetTypeBindingModel>(data: _mapper.Map<UpdateAssetTypeBindingModel>(typeUpdated));
+            _mapper.Map(updateAssetTypeBindingModel, assetType);
+            return Success<AssetTypeResponseDTO>(data: _mapper.Map<AssetTypeResponseDTO>(await _baseService.Update(assetType)));
         }
 
         [HttpDelete("{id:int}")]
