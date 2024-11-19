@@ -10,7 +10,7 @@ namespace ASM.Core.Entities
 
         public DateTime ApprovedDate { get; set; }
 
-        public int IsApproved { get; set; }
+        public bool IsApproved { get; set; }
 
         #region CONFIG  RELATIONSHIP
         public int RequesterId { get; set; }

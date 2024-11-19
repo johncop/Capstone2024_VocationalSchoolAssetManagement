@@ -11,13 +11,13 @@ using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
 namespace ASM.WebApi.Controllers
 {
-    [Route("api/loaner-request")]
+    [Route("api/loan-request")]
     [ApiController]
-    public class LoanerRequestController : BaseApi
+    public class LoanRequestController : BaseApi
     {
         private readonly IBaseService<LoanerRequest> _baseService;
 
-        public LoanerRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
+        public LoanRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
         }
