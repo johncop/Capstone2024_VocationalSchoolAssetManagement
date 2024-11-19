@@ -51,12 +51,12 @@ namespace ASM.WebApi.Controllers
 
             if (result.Succeeded)
             {
-                var defaultRole = _context.Roles.FirstOrDefault(x => x.Name == "Client");
+                var defaultRole = _context.Roles.FirstOrDefault(x => x.Name.ToLower() == "requester");
                 var lastUser = _context.Users.OrderBy(x => x.Id).LastOrDefault();
 
                 if (defaultRole is null || lastUser is null)
                 {
-                    return BadRequest(result);
+                    return BadRequest(new { succeeded = false, error = result.Errors });
                 }
 
                 IdentityUserRole<int> userRole = new()
@@ -72,7 +72,7 @@ namespace ASM.WebApi.Controllers
 
                 if (string.IsNullOrEmpty(lastUser.UserName) || string.IsNullOrEmpty(lastUser.Email))
                 {
-                    return BadRequest(result);
+                    return BadRequest(new { succeeded = false, error = result.Errors });
                 }
 
                 if (_emailService.ConfirmEmail(lastUser, token))
@@ -80,7 +80,7 @@ namespace ASM.WebApi.Controllers
                     return Ok(result);
                 }
 
-                return BadRequest(result);
+                return BadRequest(new { succeeded = false, error = result.Errors });
             }
 
             return BadRequest(result);
