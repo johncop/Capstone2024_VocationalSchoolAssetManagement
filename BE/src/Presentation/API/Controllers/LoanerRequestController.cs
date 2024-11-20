@@ -13,13 +13,13 @@ using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
 namespace ASM.WebApi.Controllers;
 
-[Route("api/loaner-request")]
+[Route("api/loan-request")]
 [ApiController]
-public class LoanerRequestController : BaseApi
+public class LoanRequestController : BaseApi
 {
     private readonly IBaseService<LoanerRequest> _baseService;
 
-    public LoanerRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
+    public LoanRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
     {
         _baseService = baseService;
     }
@@ -27,7 +27,8 @@ public class LoanerRequestController : BaseApi
     [HttpGet]
     public async Task<IResponse> GetAll()
     {
-        return Success<IList<LoanerRequestReponseDTO>>(data: await _baseService.GetAllAsync<LoanerRequestReponseDTO>());
+        return Success<IList<LoanerRequestReponseDTO>>(
+            data: await _baseService.GetAllAsync<LoanerRequestReponseDTO>());
     }
 
     [HttpGet("{id:int}")]
