@@ -1,63 +1,82 @@
 ﻿using System.Net;
+using System.Security.Claims;
 using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
 using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Request;
+using ASM.Core.DTOs.User;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
-namespace ASM.WebApi.Controllers
+namespace ASM.WebApi.Controllers;
+
+[Route("api/loaner-request")]
+[ApiController]
+public class LoanerRequestController : BaseApi
 {
-    [Route("api/loaner-request")]
-    [ApiController]
-    public class LoanerRequestController : BaseApi
+    private readonly IBaseService<LoanerRequest> _baseService;
+
+    public LoanerRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
     {
-        private readonly IBaseService<LoanerRequest> _baseService;
-
-        public LoanerRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
-        {
-            _baseService = baseService;
-        }
-
-        [HttpGet]
-        public async Task<IResponse> GetAll() =>
-            Success<IList<LoanerRequestReponseDTO>>(data: await _baseService.GetAllAsync<LoanerRequestReponseDTO>());
-
-        [HttpGet("{id:int}")]
-        public IResponse Get(int id)
-        {
-            var request = _baseService.Find(id);
-            return Success<IQueryable>(data: request);
-        }
-
-        [HttpPost]
-        public async Task<IResponse> Create([FromBody] LoanerRequest request)
-        {
-            var result = await _baseService.Crete(request);
-            return Success(data: result.Id);
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IResponse> Update(int id, [FromBody] UpdateLoanerRequestBindingModel updateLoanerRequestBindingModel)
-        {
-            var loanerRequest = await _baseService.Find(id).FirstOrDefaultAsync();
-            if (loanerRequest is null)
-            {
-                return Error("Loaner Request Not Found", HttpStatusCode.NotFound);
-            }
-
-            _mapper.Map(updateLoanerRequestBindingModel, loanerRequest);
-            return Success(data: _mapper.Map<LoanerRequestReponseDTO>(await _baseService.Update(loanerRequest)));
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<IResponse> Delete(int id)
-        {
-            var message = await _baseService.Delete(id);
-            return Success(message: message);
-        }
+        _baseService = baseService;
     }
+
+    [HttpGet]
+    public async Task<IResponse> GetAll()
+    {
+        return Success<IList<LoanerRequestReponseDTO>>(data: await _baseService.GetAllAsync<LoanerRequestReponseDTO>());
+    }
+
+    [HttpGet("{id:int}")]
+    public IResponse Get(int id)
+    {
+        var request = _baseService.Find(id);
+        return Success<IQueryable>(data: request);
+    }
+
+    [HttpPost]
+    public async Task<IResponse> Create([FromBody] LoanerRequest request)
+    {
+        var result = await _baseService.Crete(request);
+        return Success(data: result.Id);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IResponse> Update(int id,
+        [FromBody] UpdateLoanerRequestBindingModel updateLoanerRequestBindingModel)
+    {
+        var loanerRequest = await _baseService.Find(id).FirstOrDefaultAsync();
+        if (loanerRequest is null) return Error("Loaner Request Not Found", HttpStatusCode.NotFound);
+
+        _mapper.Map(updateLoanerRequestBindingModel, loanerRequest);
+        return Success(data: _mapper.Map<LoanerRequestReponseDTO>(await _baseService.Update(loanerRequest)));
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IResponse> Delete(int id)
+    {
+        var message = await _baseService.Delete(id);
+        return Success(message);
+    }
+
+    #region SUPPORT FUNC
+
+    private async Task<UserResponseDTO> GetCurrentUser()
+    {
+        var user = HttpContext.User;
+        if (user.Identity is null && !user.Identity.IsAuthenticated) return null;
+
+        return new UserResponseDTO
+        {
+            UserId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value),
+            UserName = user.Identity.Name,
+            Email = user.FindFirst(ClaimTypes.Email)?.Value,
+            Roles = user.FindAll(ClaimTypes.Role).Select(x => x.Value)
+        };
+    }
+
+    #endregion
 }
