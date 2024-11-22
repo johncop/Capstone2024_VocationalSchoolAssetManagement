@@ -4,7 +4,7 @@ import ChartistProvider from './_helper/Chartist/ChartistProvider';
 import ChartjsProvider from './_helper/Chartjs/ChartProvider';
 import GoogleChartProvider from './_helper/GoogleChart/GoogleChartProvider';
 import ProjectProvider from './_helper/Project/ProjectProvider';
-import ChatProvider from './_helper/Chat/ChatProvider';
+import ChatBotProvider from './_helper/ChatBot/ChatBotProvider';
 import ContactProvider from './_helper/Contact/ContactProvider';
 import TaskProvider from './_helper/Task/TaskProvider';
 import GalleryProvider from './_helper/Gallery/GalleryProvider';
@@ -41,7 +41,7 @@ const App = () => (
                               <GalleryProvider>
                                 <TaskProvider>
                                   <ContactProvider>
-                                    <ChatProvider>
+                                    <ChatBotProvider>
                                       <ProjectProvider>
                                         <GoogleChartProvider>
                                           <ChartjsProvider>
@@ -53,7 +53,7 @@ const App = () => (
                                           </ChartjsProvider>
                                         </GoogleChartProvider>
                                       </ProjectProvider>
-                                    </ChatProvider>
+                                    </ChatBotProvider>
                                   </ContactProvider>
                                 </TaskProvider>
                               </GalleryProvider>
