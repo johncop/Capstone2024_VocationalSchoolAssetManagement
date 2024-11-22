@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Context from './index';
 import ChatBot from "react-chatbotify";
+import MyRequests from './Component/MyRequests';
+import UpcomingExpiredRequest from './Component/UpcomingExpiredRequest';
 
 const ChatBotProvider = (props) => {
 
@@ -85,8 +87,8 @@ const ChatBotProvider = (props) => {
 					return "asset_type_choices";
 
 				case "Expired Request":
-					
-					break;
+					return "expired_requested_assets";
+        
 				case "Free Chat":
 					return "free_chat";
       
@@ -120,10 +122,22 @@ const ChatBotProvider = (props) => {
     },
 		requested_assets: {
 			message: async (params) => {
-				const result = await fetchData(params);
+				//const result = await fetchData(params);
 				return "I found some request that you have requested !";
 			},
-      checkboxes: {items: ["Dog", "Cat", "Rabbit", "Hamster", "Bird"], min: 2, max: 4},
+      component: (
+				<MyRequests/>
+			),
+			path: "prompt_again",
+		},
+    expired_requested_assets: {
+			message: async (params) => {
+				//const result = await fetchData(params);
+				return "I found some expired request that you have requested !";
+			},
+      component: (
+				<UpcomingExpiredRequest/>
+			),
 			path: "prompt_again",
 		},
     asset_type_choices: {
