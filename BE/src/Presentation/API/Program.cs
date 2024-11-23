@@ -38,30 +38,30 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                                            {
-                                                Name = "Authorization",
-                                                Type = SecuritySchemeType.Http,
-                                                Scheme = "Bearer",
-                                                BearerFormat = "JWT",
-                                                In = ParameterLocation.Header,
-                                                Description =
-                                                    "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
-                                            });
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description =
+            "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+    });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                                   {
-                                       {
-                                           new OpenApiSecurityScheme
-                                           {
-                                               Reference = new OpenApiReference
-                                                           {
-                                                               Type = ReferenceType.SecurityScheme,
-                                                               Id = "Bearer"
-                                                           }
-                                           },
-                                           new string[] { }
-                                       }
-                                   });
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
 });
 services.AddEntityFrameworkRepositories();
 
@@ -69,50 +69,50 @@ services.AddEntityFrameworkRepositories();
 var jwtSecretKey = builder.Configuration["Jwt:Key"];
 
 services.AddAuthentication(options =>
-         {
-             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-             options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-             options.DefaultScheme = "MultiScheme";
-         }) // add default authentication schema
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            options.DefaultScheme = "MultiScheme";
+        }) // add default authentication schema
         .AddPolicyScheme("MultiScheme", "JWT or Cookie", options =>
-         {
-             options.ForwardDefaultSelector = context =>
-             {
-                 var bearerAuth = context.Request.Headers["Authorization"].FirstOrDefault()?.StartsWith("Bearer ") ??
-                                  false;
+        {
+            options.ForwardDefaultSelector = context =>
+            {
+                var bearerAuth = context.Request.Headers["Authorization"].FirstOrDefault()?.StartsWith("Bearer ") ??
+                    false;
 
-                 // You could also check for the actual path here if that's your requirement:
-                 if (bearerAuth)
-                     return JwtBearerDefaults.AuthenticationScheme;
-                 return CookieAuthenticationDefaults.AuthenticationScheme;
-             };
-         })
+                // You could also check for the actual path here if that's your requirement:
+                if (bearerAuth)
+                    return JwtBearerDefaults.AuthenticationScheme;
+                return CookieAuthenticationDefaults.AuthenticationScheme;
+            };
+        })
         .AddJwtBearer(options =>
-         {
-             options.TokenValidationParameters = new TokenValidationParameters
-                                                 {
-                                                     ValidateIssuer = true,
-                                                     ValidateAudience = true,
-                                                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                                                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                                                     IssuerSigningKey =
-                                                         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
-                                                     ClockSkew = TimeSpan
-                                                        .Zero // Optional: Removes the default 5 mins tolerance
-                                                 };
-         })
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
+                ClockSkew = TimeSpan
+                    .Zero // Optional: Removes the default 5 mins tolerance
+            };
+        })
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-         {
-             options.LoginPath = builder.Configuration["Authentication:Google:LoginPath"];
-             ; // Must be lowercase
-         })
+        {
+            options.LoginPath = builder.Configuration["Authentication:Google:LoginPath"];
+            ; // Must be lowercase
+        })
         .AddGoogle(options =>
-         {
-             options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-             options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-             // Configure the callback Url from Google (if not set, the default is /signin-google)
-             options.CallbackPath = "/login-with-google";
-         })
+        {
+            options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+            options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            // Configure the callback Url from Google (if not set, the default is /signin-google)
+            options.CallbackPath = "/login-with-google";
+        })
         .AddBearerToken(IdentityConstants.BearerScheme)
         .AddCookie(IdentityConstants.ApplicationScheme);
 
@@ -152,9 +152,9 @@ services.Configure<DataProtectionTokenProviderOptions>(options =>
 services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
     build
-       .WithOrigins("*")
-       .AllowAnyMethod()
-       .AllowAnyHeader();
+        .WithOrigins("*")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
 }));
 
 var app = builder.Build();
@@ -185,6 +185,13 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/swagger");
     else
         await next();
+});
+
+app.UseCors(x =>
+{
+    x.AllowAnyOrigin()
+     .AllowAnyHeader()
+     .AllowAnyMethod();
 });
 
 app.Run();
