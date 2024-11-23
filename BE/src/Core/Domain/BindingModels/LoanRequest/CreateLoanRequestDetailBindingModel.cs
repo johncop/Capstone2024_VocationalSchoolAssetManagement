@@ -1,6 +1,6 @@
 namespace ASM.Core.BindingModels.Request;
 
-public class AddLoanRequestDetailBindingModel
+public class CreateLoanRequestDetailBindingModel
 {
     public int AssetId { get; set; }
     public string Description { get; set; }

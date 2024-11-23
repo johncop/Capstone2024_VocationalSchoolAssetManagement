@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
-namespace ASM.Core.Entities
+namespace ASM.Core.Entities;
+
+public class ApplicationUser : IdentityUser<int>
 {
-    public class ApplicationUser : IdentityUser<int>
-    {
-        [MaxLength(100)]
-        public string FirstName { get; set; }
+    [MaxLength(100)] public string FirstName { get; set; }
 
-        [MaxLength(100)]
-        public string LastName { get; set; }
+    [MaxLength(100)] public string LastName { get; set; }
 
-        public string Address { get; set; }
+    public string Address { get; set; }
 
-        #region CONFIG RELATIONSHIP
-        public ICollection<Approval> Approvals { get; set; }
-        public ICollection<LoanerRequest> LoanerRequests { get; set; }
-        #endregion
-    }
+    #region CONFIG RELATIONSHIP
+
+    public ICollection<Approval> Approvals { get; set; }
+    public ICollection<LoanRequest> LoanerRequests { get; set; }
+
+    #endregion
 }

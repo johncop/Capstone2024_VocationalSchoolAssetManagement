@@ -1,12 +1,11 @@
-﻿namespace ASM.Core.Entities
-{
-    public class Approval
-    {
-        public int LoanerRequestId { get; set; }
-        public LoanerRequest LoanerRequest { get; set; }
+﻿namespace ASM.Core.Entities;
 
-        public int ApproverId { get; set; }
-        public ApplicationUser Approver { get; set; }
-        public DateTime ApprovalDate { get; set; }
-    }
+public class Approval
+{
+    public int LoanerRequestId { get; set; }
+    public LoanRequest LoanRequest { get; set; }
+
+    public int ApproverId { get; set; }
+    public ApplicationUser Approver { get; set; }
+    public DateTime ApprovalDate { get; set; }
 }

@@ -2,10 +2,12 @@ using ASM.Core.BindingModels.Asset;
 using ASM.Core.BindingModels.AssetType;
 using ASM.Core.BindingModels.Category;
 using ASM.Core.BindingModels.Depreciation;
+using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Asset;
 using ASM.Core.DTOs.Category;
 using ASM.Core.DTOs.Depreciation;
 using ASM.Core.DTOs.Image;
+using ASM.Core.DTOs.Request;
 using ASM.Core.Entities;
 using AutoMapper;
 
@@ -19,6 +21,7 @@ public class ConfigMapper : Profile
         AssetTypeConfiguration();
         CategoryConfiguration();
         DepreciationConfiguration();
+        LoanRequestConfiguration();
     }
 
     private void AssetConfiguration()
@@ -70,5 +73,13 @@ public class ConfigMapper : Profile
     {
         CreateMap<UpdateDepreciationBindingModel, Depreciation>();
         CreateMap<Depreciation, DepreciationResponseDTO>();
+    }
+
+    private void LoanRequestConfiguration()
+    {
+        CreateMap<LoanRequest, LoanerRequestReponseDTO>();
+
+        CreateMap<CreateLoanRequestBindingModel, LoanRequest>();
+        CreateMap<CreateLoanRequestDetailBindingModel, LoanRequestDetail>();
     }
 }

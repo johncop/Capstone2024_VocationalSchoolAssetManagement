@@ -19,8 +19,8 @@ public class AssetManagementDbContext : IdentityDbContext<ApplicationUser, Ident
     public DbSet<Maintenance> Maintenances { get; set; }
     public DbSet<Depreciation> Depreciations { get; set; }
     public DbSet<Notification> Notifications { get; set; }
-    public DbSet<LoanerRequest> LoanerRequests { get; set; }
-    public DbSet<LoanerRequestDetail> LoanerRequestDetails { get; set; }
+    public DbSet<LoanRequest> LoanRequests { get; set; }
+    public DbSet<LoanRequestDetail> LoanRequestDetails { get; set; }
     public DbSet<AssetImage> AssetImages { get; set; }
     public DbSet<MaintenanceImage> MaintenanceImages { get; set; }
     public DbSet<DepreciationImage> DepreciationImages { get; set; }

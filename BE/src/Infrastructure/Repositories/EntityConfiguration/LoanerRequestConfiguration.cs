@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ASM.Database.EntityConfiguration
+namespace ASM.Database.EntityConfiguration;
+
+public class LoanerRequestConfiguration : IEntityTypeConfiguration<LoanRequest>
 {
-    public class LoanerRequestConfiguration : IEntityTypeConfiguration<LoanerRequest>
+    public void Configure(EntityTypeBuilder<LoanRequest> builder)
     {
-        public void Configure(EntityTypeBuilder<LoanerRequest> builder)
-        {
-            builder.HasMany(x => x.Approvals).WithOne(x => x.LoanerRequest).OnDelete(DeleteBehavior.ClientCascade);
-        }
+        builder.HasMany(x => x.Approvals).WithOne(x => x.LoanRequest).OnDelete(DeleteBehavior.ClientCascade);
     }
 }

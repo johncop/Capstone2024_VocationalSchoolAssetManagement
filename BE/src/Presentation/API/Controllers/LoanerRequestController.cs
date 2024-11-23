@@ -5,11 +5,11 @@ using ASM.Application.Shared;
 using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Request;
 using ASM.Core.DTOs.User;
+using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LoanerRequest = ASM.Core.Entities.LoanerRequest;
 
 namespace ASM.WebApi.Controllers;
 
@@ -17,9 +17,9 @@ namespace ASM.WebApi.Controllers;
 [ApiController]
 public class LoanRequestController : BaseApi
 {
-    private readonly IBaseService<LoanerRequest> _baseService;
+    private readonly IBaseService<LoanRequest> _baseService;
 
-    public LoanRequestController(IBaseService<LoanerRequest> baseService, IMapper mapper) : base(mapper)
+    public LoanRequestController(IBaseService<LoanRequest> baseService, IMapper mapper) : base(mapper)
     {
         _baseService = baseService;
     }
@@ -39,9 +39,14 @@ public class LoanRequestController : BaseApi
     }
 
     [HttpPost]
-    public async Task<IResponse> Create([FromBody] LoanerRequest request)
+    public async Task<IResponse> Create([FromBody] CreateLoanRequestBindingModel createLoanRequestBindingModel)
     {
-        var result = await _baseService.Crete(request);
+        var loanRequest = _mapper.Map<LoanRequest>(createLoanRequestBindingModel);
+        if (createLoanRequestBindingModel.Details is null || createLoanRequestBindingModel.Details.Count == 0)
+            return Error("Details are required", HttpStatusCode.BadRequest);
+
+
+        var result = await _baseService.Crete(loanRequest);
         return Success(data: result.Id);
     }
 
