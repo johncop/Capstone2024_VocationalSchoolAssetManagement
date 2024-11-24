@@ -79,7 +79,17 @@ namespace ASM.WebApi.Helper
 
         private void LoanRequestConfiguration()
         {
-            CreateMap<LoanRequest, LoanerRequestReponseDTO>();
+            CreateMap<LoanRequest, LoanerRequestReponseDTO>()
+                .ForMember(x => x.Details, opt => opt.MapFrom(src => src.LoanerRequestDetails.Select(x => new LoanRequestDetailResponseDTO
+                {
+                    Id = x.Id,
+                    Description = x.Description,
+                    AssetName = x.Asset.Name,
+                    Quantity = x.Quantity,
+                    ReturnDate = x.ReturnDate,
+                    ActualReturnDate = x.ActualReturnDate,
+                    ConditionOnReturn = x.ConditionOnReturn
+                }).ToList()));
             CreateMap<LoanRequestDetail, LoanRequestDetailResponseDTO>();
 
             CreateMap<CreateLoanRequestBindingModel, LoanRequest>();

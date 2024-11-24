@@ -44,9 +44,11 @@ namespace ASM.Services.Services
         public async Task<LoanerRequestReponseDTO> GetAsync(Expression<Func<LoanRequest, bool>>? filter = null,
             Expression<Func<LoanRequest, object>>? includeEntities = null, bool disableChangeTracker = true)
         {
-            return await _queryRepository.Find(filter)
-                                         .Include(x => x.LoanerRequestDetails)
-                                         .ProjectTo<LoanerRequestReponseDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+            var response = await _queryRepository.Find(filter)
+                                                 .Include(x => x.LoanerRequestDetails)
+                                                 .ProjectTo<LoanerRequestReponseDTO>(_mapper.ConfigurationProvider)
+                                                 .FirstOrDefaultAsync();
+            return response;
         }
 
         public async Task<(LoanerRequestReponseDTO response, string errMsg, HttpStatusCode sttCode)> Create(CreateLoanRequestBindingModel model)

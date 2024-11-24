@@ -36,7 +36,7 @@ namespace ASM.WebApi.Controllers
         {
             var currentUser = await _userService.GetCurrentUserAsync();
 
-            var request = await _loanRequestService.GetAsync(x => x.RequesterId == currentUser.Id && x.Id == id, x => x.LoanerRequestDetails);
+            var request = await _loanRequestService.GetAsync(x => x.RequesterId == currentUser.Id && x.Id == id);
             return Success(data: request);
         }
 

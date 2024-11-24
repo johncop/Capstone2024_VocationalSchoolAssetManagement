@@ -81,14 +81,13 @@
 
         public static class ApplicationSettings
         {
+            public const string ApiVersionGroupFormat = "'v'VV";
             public static class DefaultValues
             {
                 public const string StringEmptyValue = "N/A";
                 public const string ShortDateFormat = "dd/MM/yyyy";
                 public const int PageSize = 25;
             }
-
-            public const string ApiVersionGroupFormat = "'v'VV";
         }
 
         public static class Transactions
@@ -152,9 +151,8 @@
         {
             public const string SMTP_SERVER = "smtp.gmail.com";
             public const int SMTP_PORT = 587;
-            public const string SMTP_USER = "uyennguyen0721@gmail.com";
-            public const string SMTP_PASS = "fxzg wwoz fpmo btdh";
+            public const string SMTP_USER = "bookingparty.system@gmail.com";
+            public const string SMTP_PASS = "jbvs eljx aayn mste";
         }
     }
-
 }
