@@ -120,12 +120,19 @@ services.AddAuthorizationBuilder();
 
 //services.AddScoped<UserManager<ApplicationUser>, CustomUserManager<ApplicationUser>>();
 services.AddIdentityCore<ApplicationUser>(opts => opts.SignIn.RequireConfirmedEmail = true)
+        .AddRoles<IdentityRole<int>>()
         .AddEntityFrameworkStores<AssetManagementDbContext>()
         .AddApiEndpoints()
         .AddDefaultTokenProviders(); // Adds token providers for things like email confirmation, password reset;
 
-services.AddScoped<UserManager<ApplicationUser>>();
-services.AddScoped<SignInManager<ApplicationUser>>();
+// services.AddIdentity<ApplicationUser, IdentityRole<int>>(opts => opts.SignIn.RequireConfirmedEmail = true)
+//         .AddEntityFrameworkStores<AssetManagementDbContext>()
+//         .AddApiEndpoints()
+//         .AddDefaultTokenProviders();
+
+
+// services.AddScoped<UserManager<ApplicationUser>>();
+// services.AddScoped<SignInManager<ApplicationUser>>();
 
 
 //services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
@@ -141,6 +148,8 @@ services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 services.AddScoped(typeof(IEmailService), typeof(EmailService));
 services.AddScoped(typeof(IAuthService), typeof(AuthService));
 services.AddSingleton<IBlobService, BlobService>();
+services.AddScoped<IUserService, UserService>();
+services.AddScoped<ILoanRequestService, LoanRequestService>();
 
 services.AddHttpContextAccessor();
 services.AddAutoMapper(typeof(ConfigMapper));

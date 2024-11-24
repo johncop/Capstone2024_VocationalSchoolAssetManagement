@@ -4,6 +4,7 @@ using ASM.Database.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASM.Database.Migrations
 {
     [DbContext(typeof(AssetManagementDbContext))]
-    partial class AssetManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124093959_UpdateApprovalTableRelationship")]
+    partial class UpdateApprovalTableRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -454,7 +457,10 @@ namespace ASM.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LoanRequestId")
+                    b.Property<int?>("LoanRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LoanerRequestId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -871,9 +877,7 @@ namespace ASM.Database.Migrations
 
                     b.HasOne("ASM.Core.Entities.LoanRequest", "LoanRequest")
                         .WithMany("LoanerRequestDetails")
-                        .HasForeignKey("LoanRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LoanRequestId");
 
                     b.Navigation("Asset");
 

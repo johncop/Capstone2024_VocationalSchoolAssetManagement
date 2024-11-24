@@ -5,5 +5,6 @@
         void Add(params TEntity[] entities);
         void Update(params TEntity[] entities);
         void Delete(params TEntity[] entities);
+        void DeleteAll(IEnumerable<TEntity> entities);
     }
 }
