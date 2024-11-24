@@ -151,8 +151,8 @@
         {
             public const string SMTP_SERVER = "smtp.gmail.com";
             public const int SMTP_PORT = 587;
-            public const string SMTP_USER = "bookingparty.system@gmail.com";
-            public const string SMTP_PASS = "jbvs eljx aayn mste";
+            public const string SMTP_USER = "testsevermail123@gmail.com";
+            public const string SMTP_PASS = "ztqd ggis uzjk hmcq";
         }
     }
 }
