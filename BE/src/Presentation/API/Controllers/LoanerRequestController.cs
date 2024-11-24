@@ -1,88 +1,74 @@
 ﻿using System.Net;
-using System.Security.Claims;
 using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
 using ASM.Core.BindingModels.Request;
-using ASM.Core.DTOs.Request;
-using ASM.Core.DTOs.User;
-using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace ASM.WebApi.Controllers;
-
-[Route("api/loan-request")]
-[ApiController]
-public class LoanRequestController : BaseApi
+namespace ASM.WebApi.Controllers
 {
-    private readonly IBaseService<LoanRequest> _baseService;
-
-    public LoanRequestController(IBaseService<LoanRequest> baseService, IMapper mapper) : base(mapper)
+    [Route("api/loan-request")]
+    [ApiController]
+    [Authorize]
+    public class LoanRequestController : BaseApi
     {
-        _baseService = baseService;
-    }
+        private readonly ILoanRequestService _loanRequestService;
+        private readonly IUserService _userService;
 
-    [HttpGet]
-    public async Task<IResponse> GetAll()
-    {
-        return Success<IList<LoanerRequestReponseDTO>>(
-            data: await _baseService.GetAllAsync<LoanerRequestReponseDTO>());
-    }
-
-    [HttpGet("{id:int}")]
-    public IResponse Get(int id)
-    {
-        var request = _baseService.Find(id);
-        return Success<IQueryable>(data: request);
-    }
-
-    [HttpPost]
-    public async Task<IResponse> Create([FromBody] CreateLoanRequestBindingModel createLoanRequestBindingModel)
-    {
-        var loanRequest = _mapper.Map<LoanRequest>(createLoanRequestBindingModel);
-        if (createLoanRequestBindingModel.Details is null || createLoanRequestBindingModel.Details.Count == 0)
-            return Error("Details are required", HttpStatusCode.BadRequest);
-
-
-        var result = await _baseService.Crete(loanRequest);
-        return Success(data: result.Id);
-    }
-
-    [HttpPut("{id:int}")]
-    public async Task<IResponse> Update(int id,
-        [FromBody] UpdateLoanerRequestBindingModel updateLoanerRequestBindingModel)
-    {
-        var loanerRequest = await _baseService.Find(id).FirstOrDefaultAsync();
-        if (loanerRequest is null) return Error("Loaner Request Not Found", HttpStatusCode.NotFound);
-
-        _mapper.Map(updateLoanerRequestBindingModel, loanerRequest);
-        return Success(data: _mapper.Map<LoanerRequestReponseDTO>(await _baseService.Update(loanerRequest)));
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IResponse> Delete(int id)
-    {
-        var message = await _baseService.Delete(id);
-        return Success(message);
-    }
-
-    #region SUPPORT FUNC
-
-    private async Task<UserResponseDTO> GetCurrentUser()
-    {
-        var user = HttpContext.User;
-        if (user.Identity is null && !user.Identity.IsAuthenticated) return null;
-
-        return new UserResponseDTO
+        public LoanRequestController(ILoanRequestService loanRequestService, IUserService userService, IMapper mapper) : base(mapper)
         {
-            UserId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value),
-            UserName = user.Identity.Name,
-            Email = user.FindFirst(ClaimTypes.Email)?.Value,
-            Roles = user.FindAll(ClaimTypes.Role).Select(x => x.Value)
-        };
-    }
+            _loanRequestService = loanRequestService;
+            _userService = userService;
+        }
 
-    #endregion
+        [HttpGet]
+        public async Task<IResponse> GetAll()
+        {
+            var currentUser = await _userService.GetCurrentUserAsync();
+            return Success(
+                data: await _loanRequestService.GetAllAsync(x => x.RequesterId == currentUser.Id, x => x.LoanerRequestDetails));
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IResponse> Get(int id)
+        {
+            var currentUser = await _userService.GetCurrentUserAsync();
+
+            var request = await _loanRequestService.GetAsync(x => x.RequesterId == currentUser.Id && x.Id == id, x => x.LoanerRequestDetails);
+            return Success(data: request);
+        }
+
+        [HttpPost]
+        public async Task<IResponse> Create([FromBody] CreateLoanRequestBindingModel createLoanRequestBindingModel)
+        {
+            if (createLoanRequestBindingModel.Details is null || createLoanRequestBindingModel.Details.Count == 0)
+                return Error("Details are required", HttpStatusCode.BadRequest);
+
+
+            var result = await _loanRequestService.Create(createLoanRequestBindingModel);
+            if (result.errMsg != "")
+            {
+                return Error(result.errMsg, HttpStatusCode.BadRequest);
+            }
+
+            return Success(data: result.response);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IResponse> Update(int id,
+            [FromBody] UpdateLoanerRequestBindingModel updateLoanerRequestBindingModel)
+        {
+            var result = await _loanRequestService.Update(id, updateLoanerRequestBindingModel);
+            return result.errMsg != "" ? Error(result.errMsg, HttpStatusCode.BadRequest) : Success(data: result.response);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IResponse> Delete(int id)
+        {
+            var message = await _loanRequestService.DeleteAsync(id);
+            return Success(message);
+        }
+    }
 }

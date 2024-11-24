@@ -31,6 +31,11 @@ namespace ASM.Repositories.Repositories
             PerformDbOperation(_dbSet.Remove, entities);
         }
 
+        public void DeleteAll(IEnumerable<TEntity> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
         private void PerformDbOperation(Func<TEntity, EntityEntry<TEntity>> dbOperation, params TEntity[] entities)
         {
             if (dbOperation == null)
@@ -43,11 +48,10 @@ namespace ASM.Repositories.Repositories
                 throw new ArgumentException(nameof(entities));
             }
 
-            foreach (TEntity entity in entities)
+            foreach (var entity in entities)
             {
                 dbOperation(entity);
             }
-
         }
     }
 }

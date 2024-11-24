@@ -4,6 +4,7 @@ using ASM.Database.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASM.Database.Migrations
 {
     [DbContext(typeof(AssetManagementDbContext))]
-    partial class AssetManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124082330_UpdateLoanRequestEntity")]
+    partial class UpdateLoanRequestEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,7 +106,7 @@ namespace ASM.Database.Migrations
 
             modelBuilder.Entity("ASM.Core.Entities.Approval", b =>
                 {
-                    b.Property<int>("LoanRequestId")
+                    b.Property<int>("LoanerRequestId")
                         .HasColumnType("int");
 
                     b.Property<int>("ApproverId")
@@ -112,9 +115,14 @@ namespace ASM.Database.Migrations
                     b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("LoanRequestId", "ApproverId");
+                    b.Property<int?>("LoanRequestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoanerRequestId", "ApproverId");
 
                     b.HasIndex("ApproverId");
+
+                    b.HasIndex("LoanRequestId");
 
                     b.ToTable("Approvals");
                 });
@@ -454,7 +462,10 @@ namespace ASM.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LoanRequestId")
+                    b.Property<int?>("LoanRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LoanerRequestId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -772,8 +783,7 @@ namespace ASM.Database.Migrations
                     b.HasOne("ASM.Core.Entities.LoanRequest", "LoanRequest")
                         .WithMany("Approvals")
                         .HasForeignKey("LoanRequestId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("Approver");
 
@@ -871,9 +881,7 @@ namespace ASM.Database.Migrations
 
                     b.HasOne("ASM.Core.Entities.LoanRequest", "LoanRequest")
                         .WithMany("LoanerRequestDetails")
-                        .HasForeignKey("LoanRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LoanRequestId");
 
                     b.Navigation("Asset");
 
