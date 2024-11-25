@@ -1,9 +1,10 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASM.Core.Entities.Common
 {
+    [Index(nameof(Id), IsDescending = [true])]
     public class BaseEntity
     {
         [Key]
