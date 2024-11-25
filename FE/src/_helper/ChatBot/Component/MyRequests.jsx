@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-
 import { Card, CardBody, CardHeader, Nav } from 'reactstrap';
-import { Image, H5 } from '../../../AbstractElements';
 import RecentOrderContentTab from './RequestTab';
 import useShowClass from '../../../Hooks/useShowClass';
 import { assets } from '../Data';
-import TabWidget from './CategoryTab';
+import { H6, H5 } from '../../../AbstractElements';
+import SvgIcon from '../../../Components/Common/Component/SvgIcon';
 
 const MyRequests = () => {
   const [isActive, setIsActive] = useState('0');
@@ -29,7 +28,18 @@ const MyRequests = () => {
           <Nav tag='div' pills={true} tabs>
             {assets.asset_category.map((item, k) => (
               <button key={k} onClick={(e) => activeHandle(k)} className={`frame-box ${isActive === `${k}` && 'active'}`}>
-              <TabWidget data={item}></TabWidget>
+              <div className='currency-widget primary'>
+                <div className='d-flex'>
+                  <div className='currency-icon-widget'>
+                    <SvgIcon iconId='beta' />
+                  </div>
+                  <div>
+                    <H6>
+                      {item.name}
+                    </H6>
+                  </div>
+                </div>
+              </div>
             </button>
             ))}
           </Nav>

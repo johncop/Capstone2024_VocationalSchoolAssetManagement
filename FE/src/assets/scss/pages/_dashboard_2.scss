@@ -463,7 +463,7 @@
 .frame-box {
   background: var(--recent-box-bg);
   border-radius: 10px;
-  min-width: 76px;
+  // min-width: 76px;
   box-shadow: 2px 2px 2px var(--recent-border);
   @media (max-width: 575px) {
     min-width: 65px;
