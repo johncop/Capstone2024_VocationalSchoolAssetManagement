@@ -122,7 +122,6 @@ const ChatBotProvider = (props) => {
     },
 		requested_assets: {
 			message: async (params) => {
-				//const result = await fetchData(params);
 				return "I found some request that you have requested !";
 			},
       component: (

@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 
 // Recent Order Table //
 export const MyRequestList = [
@@ -144,4 +144,39 @@ export const ExpiredRequestListData = [
     color: 'warning',
   },
 ];
+
+async function fetchData(params) {
+  try {
+    const response = await fetch('https://assetmanagement-dmd5bng3bcffdpab.southeastasia-01.azurewebsites.net/api/asset', {
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
+      }
+    })
+    const result = await response.json(); 
+    
+    result.asset_category = [];
+ 
+    result.data.map((item) => {
+      result.asset_category.push({name: item.assetType.category.name})
+    });
+
+    const countsByName = {};
+    result.asset_category.forEach(({ name }) => {
+      countsByName[name] = (countsByName[name] || 0) + 1;
+    });
+    const finalArray = Object.entries(countsByName)
+      .map(([name, count]) => ({ name, count }))
+
+    result.asset_category = finalArray;
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export const assets = await fetchData('');
+
+
+
 
