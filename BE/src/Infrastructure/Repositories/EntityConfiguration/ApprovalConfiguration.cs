@@ -8,7 +8,7 @@ namespace ASM.Database.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Approval> builder)
         {
-            builder.HasKey(x => new { x.LoanRequestId, x.ApproverId });
+            builder.HasKey(x => new { x.RequestId, x.ApproverId });
         }
     }
 }

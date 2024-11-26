@@ -79,8 +79,8 @@ namespace ASM.WebApi.Helper
 
         private void LoanRequestConfiguration()
         {
-            CreateMap<LoanRequest, LoanerRequestReponseDTO>()
-                .ForMember(x => x.Details, opt => opt.MapFrom(src => src.LoanerRequestDetails.Select(x => new LoanRequestDetailResponseDTO
+            CreateMap<Request, RequestResponseDTO>()
+                .ForMember(x => x.Details, opt => opt.MapFrom(src => src.RequestDetails.Select(x => new RequestDetailResponseDTO
                 {
                     Id = x.Id,
                     Description = x.Description,
@@ -90,11 +90,11 @@ namespace ASM.WebApi.Helper
                     ActualReturnDate = x.ActualReturnDate,
                     ConditionOnReturn = x.ConditionOnReturn
                 }).ToList()));
-            CreateMap<LoanRequestDetail, LoanRequestDetailResponseDTO>();
+            CreateMap<RequestDetail, RequestDetailResponseDTO>();
 
-            CreateMap<CreateLoanRequestBindingModel, LoanRequest>();
-            CreateMap<CreateLoanRequestDetailBindingModel, LoanRequestDetail>();
-            CreateMap<UpdateLoanerRequestBindingModel, LoanRequest>()
+            CreateMap<CreateRequestBindingModel, Request>();
+            CreateMap<CreateRequestDetailBindingModel, RequestDetail>();
+            CreateMap<UpdateRequestBindingModel, Request>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom((src, dest) => dest.Id))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom((src, dest) => src.Status ?? dest.Status))
                 .ForMember(dest => dest.IsApproved, opt => opt.MapFrom((src, dest) => src.IsApproved ?? dest.IsApproved));

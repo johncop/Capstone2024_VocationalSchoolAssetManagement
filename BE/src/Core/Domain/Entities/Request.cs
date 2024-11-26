@@ -2,7 +2,7 @@
 
 namespace ASM.Core.Entities
 {
-    public class LoanRequest : BaseEntity
+    public class Request : BaseEntity
     {
         public int Status { get; set; }
 
@@ -14,7 +14,7 @@ namespace ASM.Core.Entities
         public int RequesterId { get; set; }
         public ApplicationUser Requester { get; set; }
 
-        public virtual ICollection<LoanRequestDetail> LoanerRequestDetails { get; set; }
+        public virtual ICollection<RequestDetail> RequestDetails { get; set; }
         public ICollection<Approval> Approvals { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         #endregion

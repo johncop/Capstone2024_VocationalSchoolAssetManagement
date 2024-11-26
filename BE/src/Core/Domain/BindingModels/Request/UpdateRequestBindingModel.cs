@@ -1,6 +1,6 @@
 namespace ASM.Core.BindingModels.Request
 {
-    public class UpdateLoanerRequestBindingModel
+    public class UpdateRequestBindingModel
     {
         public int Id { get; set; }
         public int? Status { get; set; }
@@ -11,6 +11,6 @@ namespace ASM.Core.BindingModels.Request
 
         public bool? IsApproved { get; set; }
 
-        public IList<CreateLoanRequestDetailBindingModel> Details { get; set; }
+        public IList<CreateRequestDetailBindingModel> Details { get; set; }
     }
 }

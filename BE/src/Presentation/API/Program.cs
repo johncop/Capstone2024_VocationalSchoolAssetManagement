@@ -149,7 +149,7 @@ services.AddScoped(typeof(IEmailService), typeof(EmailService));
 services.AddScoped(typeof(IAuthService), typeof(AuthService));
 services.AddSingleton<IBlobService, BlobService>();
 services.AddScoped<IUserService, UserService>();
-services.AddScoped<ILoanRequestService, LoanRequestService>();
+services.AddScoped<IRequestService, RequestService>();
 
 services.AddHttpContextAccessor();
 services.AddAutoMapper(typeof(ConfigMapper));

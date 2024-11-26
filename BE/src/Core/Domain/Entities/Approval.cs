@@ -2,8 +2,8 @@
 {
     public class Approval
     {
-        public int LoanRequestId { get; set; }
-        public LoanRequest LoanRequest { get; set; }
+        public int RequestId { get; set; }
+        public Request Request { get; set; }
 
         public int ApproverId { get; set; }
         public ApplicationUser Approver { get; set; }

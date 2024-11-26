@@ -9,17 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASM.WebApi.Controllers
 {
-    [Route("api/loan-request")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class LoanRequestController : BaseApi
+    public class RequestController : BaseApi
     {
-        private readonly ILoanRequestService _loanRequestService;
+        private readonly IRequestService _requestService;
         private readonly IUserService _userService;
 
-        public LoanRequestController(ILoanRequestService loanRequestService, IUserService userService, IMapper mapper) : base(mapper)
+        public RequestController(IRequestService requestService, IUserService userService, IMapper mapper) : base(mapper)
         {
-            _loanRequestService = loanRequestService;
+            _requestService = requestService;
             _userService = userService;
         }
 
@@ -28,7 +28,7 @@ namespace ASM.WebApi.Controllers
         {
             var currentUser = await _userService.GetCurrentUserAsync();
             return Success(
-                data: await _loanRequestService.GetAllAsync(x => x.RequesterId == currentUser.Id, x => x.LoanerRequestDetails));
+                data: await _requestService.GetAllAsync(x => x.RequesterId == currentUser.Id, x => x.RequestDetails));
         }
 
         [HttpGet("{id:int}")]
@@ -36,18 +36,18 @@ namespace ASM.WebApi.Controllers
         {
             var currentUser = await _userService.GetCurrentUserAsync();
 
-            var request = await _loanRequestService.GetAsync(x => x.RequesterId == currentUser.Id && x.Id == id);
+            var request = await _requestService.GetAsync(x => x.RequesterId == currentUser.Id && x.Id == id);
             return Success(data: request);
         }
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] CreateLoanRequestBindingModel createLoanRequestBindingModel)
+        public async Task<IResponse> Create([FromBody] CreateRequestBindingModel createRequestBindingModel)
         {
-            if (createLoanRequestBindingModel.Details is null || createLoanRequestBindingModel.Details.Count == 0)
+            if (createRequestBindingModel.Details is null || createRequestBindingModel.Details.Count == 0)
                 return Error("Details are required", HttpStatusCode.BadRequest);
 
 
-            var result = await _loanRequestService.Create(createLoanRequestBindingModel);
+            var result = await _requestService.Create(createRequestBindingModel);
             if (result.errMsg != "")
             {
                 return Error(result.errMsg, HttpStatusCode.BadRequest);
@@ -58,17 +58,28 @@ namespace ASM.WebApi.Controllers
 
         [HttpPut("{id:int}")]
         public async Task<IResponse> Update(int id,
-            [FromBody] UpdateLoanerRequestBindingModel updateLoanerRequestBindingModel)
+            [FromBody] UpdateRequestBindingModel updateRequestBindingModel)
         {
-            var result = await _loanRequestService.Update(id, updateLoanerRequestBindingModel);
+            var result = await _requestService.Update(id, updateRequestBindingModel);
             return result.errMsg != "" ? Error(result.errMsg, HttpStatusCode.BadRequest) : Success(data: result.response);
+        }
+
+        [Route("approve/{id:int}")]
+        [HttpPut]
+        public async Task<IResponse> Approve([FromRoute] int id)
+        {
+            return Success();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IResponse> Delete(int id)
         {
-            var message = await _loanRequestService.DeleteAsync(id);
-            return Success(message);
+            var deletedResult = await _requestService.DeleteAsync(id);
+            if (deletedResult.errMsg != "")
+            {
+                return Error(deletedResult.errMsg, HttpStatusCode.BadRequest);
+            }
+            return Success("Request deleted successfully");
         }
     }
 }

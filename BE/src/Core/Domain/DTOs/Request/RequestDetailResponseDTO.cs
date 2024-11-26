@@ -1,6 +1,6 @@
 namespace ASM.Core.DTOs.Request
 {
-    public class LoanRequestDetailResponseDTO
+    public class RequestDetailResponseDTO
     {
         public int Id { get; set; }
         public string AssetName { get; set; }

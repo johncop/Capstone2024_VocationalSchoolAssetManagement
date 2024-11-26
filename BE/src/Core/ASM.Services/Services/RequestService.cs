@@ -12,19 +12,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASM.Services.Services
 {
-    public class LoanRequestService : ILoanRequestService
+    public class RequestService : IRequestService
     {
-        private readonly ICommandRepository<LoanRequestDetail> _commandDetailRepository;
-        private readonly ICommandRepository<LoanRequest> _commandRepository;
+        private readonly ICommandRepository<RequestDetail> _commandDetailRepository;
+        private readonly ICommandRepository<Request> _commandRepository;
         private readonly IMapper _mapper;
         private readonly IQueryRepository<Asset> _queryAssetRepository;
-        private readonly IQueryRepository<LoanRequest> _queryRepository;
+        private readonly IQueryRepository<Request> _queryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
 
-        public LoanRequestService(ICommandRepository<LoanRequest> commandRepository,
-            IQueryRepository<LoanRequest> queryRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserService userService, IQueryRepository<Asset> queryAssetRepository,
-            ICommandRepository<LoanRequestDetail> commandDetailRepository)
+        public RequestService(ICommandRepository<Request> commandRepository,
+            IQueryRepository<Request> queryRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserService userService, IQueryRepository<Asset> queryAssetRepository,
+            ICommandRepository<RequestDetail> commandDetailRepository)
         {
             _commandRepository = commandRepository;
             _queryRepository = queryRepository;
@@ -35,23 +35,23 @@ namespace ASM.Services.Services
             _commandDetailRepository = commandDetailRepository;
         }
 
-        public async Task<IList<LoanerRequestReponseDTO>> GetAllAsync(Expression<Func<LoanRequest, bool>>? filter = null,
-            Expression<Func<LoanRequest, object>>? includeEntities = null, bool disableChangeTracker = true)
+        public async Task<IList<RequestResponseDTO>> GetAllAsync(Expression<Func<Request, bool>>? filter = null,
+            Expression<Func<Request, object>>? includeEntities = null, bool disableChangeTracker = true)
         {
-            return await _queryRepository.GetAllAsync<LoanerRequestReponseDTO>(filter, includeEntities, disableChangeTracker);
+            return await _queryRepository.GetAllAsync<RequestResponseDTO>(filter, includeEntities, disableChangeTracker);
         }
 
-        public async Task<LoanerRequestReponseDTO> GetAsync(Expression<Func<LoanRequest, bool>>? filter = null,
-            Expression<Func<LoanRequest, object>>? includeEntities = null, bool disableChangeTracker = true)
+        public async Task<RequestResponseDTO> GetAsync(Expression<Func<Request, bool>>? filter = null,
+            Expression<Func<Request, object>>? includeEntities = null, bool disableChangeTracker = true)
         {
             var response = await _queryRepository.Find(filter)
-                                                 .Include(x => x.LoanerRequestDetails)
-                                                 .ProjectTo<LoanerRequestReponseDTO>(_mapper.ConfigurationProvider)
+                                                 .Include(x => x.RequestDetails)
+                                                 .ProjectTo<RequestResponseDTO>(_mapper.ConfigurationProvider)
                                                  .FirstOrDefaultAsync();
             return response;
         }
 
-        public async Task<(LoanerRequestReponseDTO response, string errMsg, HttpStatusCode sttCode)> Create(CreateLoanRequestBindingModel model)
+        public async Task<(RequestResponseDTO response, string errMsg, HttpStatusCode sttCode)> Create(CreateRequestBindingModel model)
         {
             try
             {
@@ -67,10 +67,10 @@ namespace ASM.Services.Services
                     return (null, "Cannot find manager", HttpStatusCode.Forbidden);
                 }
 
-                var loanRequest = _mapper.Map<LoanRequest>(model);
+                var loanRequest = _mapper.Map<Request>(model);
                 loanRequest.RequesterId = currentUser.Id;
 
-                loanRequest.LoanerRequestDetails = new List<LoanRequestDetail>();
+                loanRequest.RequestDetails = new List<RequestDetail>();
                 foreach (var detail in model.Details)
                 {
                     var asset = _queryAssetRepository.Find(x => x.Id == detail.AssetId).FirstOrDefault();
@@ -79,7 +79,7 @@ namespace ASM.Services.Services
                         return (null, "Cannot find asset", HttpStatusCode.NotFound);
                     }
 
-                    loanRequest.LoanerRequestDetails.Add(new LoanRequestDetail
+                    loanRequest.RequestDetails.Add(new RequestDetail
                     {
                         AssetId = asset.Id,
                         Description = detail.Description,
@@ -99,7 +99,7 @@ namespace ASM.Services.Services
 
                 _commandRepository.Add(loanRequest);
                 await _unitOfWork.SaveChangesAsync();
-                return (_mapper.Map<LoanerRequestReponseDTO>(loanRequest), "", HttpStatusCode.Created);
+                return (_mapper.Map<RequestResponseDTO>(loanRequest), "", HttpStatusCode.Created);
             }
             catch (DbException ex)
             {
@@ -107,15 +107,10 @@ namespace ASM.Services.Services
             }
         }
 
-        public async Task<string> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<(LoanerRequestReponseDTO response, string errMsg)> Update(int requestId, UpdateLoanerRequestBindingModel model)
+        public async Task<(RequestResponseDTO response, string errMsg)> Update(int requestId, UpdateRequestBindingModel model)
         {
             var loanRequest = await _queryRepository.InitQuery(x => x.Id == requestId)
-                                                    .Include(x => x.LoanerRequestDetails)
+                                                    .Include(x => x.RequestDetails)
                                                     .FirstOrDefaultAsync();
             if (loanRequest is null)
             {
@@ -125,7 +120,7 @@ namespace ASM.Services.Services
             _mapper.Map(model, loanRequest);
             if (model.Details.Count > 0)
             {
-                _commandDetailRepository.DeleteAll(loanRequest.LoanerRequestDetails.AsEnumerable());
+                _commandDetailRepository.DeleteAll(loanRequest.RequestDetails.AsEnumerable());
 
                 var assetIds = model.Details.Select(detail => detail.AssetId).Distinct().ToList();
                 var assets = _queryAssetRepository.Find(x => assetIds.Contains(x.Id)).ToList();
@@ -135,7 +130,7 @@ namespace ASM.Services.Services
                     return (null, "One or more assets not found");
                 }
 
-                loanRequest.LoanerRequestDetails = model.Details.Select(x => new LoanRequestDetail
+                loanRequest.RequestDetails = model.Details.Select(x => new RequestDetail
                 {
                     AssetId = assets.First(y => y.Id == x.AssetId).Id,
                     Description = x.Description,
@@ -146,7 +141,44 @@ namespace ASM.Services.Services
 
             _commandRepository.Update(loanRequest);
             await _unitOfWork.SaveChangesAsync();
-            return (_mapper.Map<LoanerRequestReponseDTO>(loanRequest), "");
+            return (_mapper.Map<RequestResponseDTO>(loanRequest), "");
+        }
+
+
+        public async Task<(RequestResponseDTO response, string errMsg)> Approve(int requestId, int approverId)
+        {
+            var request = await _queryRepository.Find(x => x.Id == requestId).Include(x => x.Approvals).FirstOrDefaultAsync();
+            if (request is null)
+            {
+                return (null, "Cannot find request");
+            }
+
+            var approval = request.Approvals.FirstOrDefault(x => x.RequestId == requestId && x.ApproverId == approverId);
+            if (approval is null)
+            {
+                return (null, "Cannot approve request");
+            }
+
+            approval.ApprovalDate = DateTime.UtcNow;
+            request.IsApproved = true;
+
+            _commandRepository.Update(request);
+            await _unitOfWork.SaveChangesAsync();
+            return (_mapper.Map<RequestResponseDTO>(request), "");
+        }
+
+        public async Task<(bool isDeleted, string errMsg)> DeleteAsync(int id)
+        {
+            var request = await _queryRepository.Find(x => x.Id == id).FirstOrDefaultAsync();
+            if (request is null)
+            {
+                return (false, "Request not found");
+            }
+
+            request.IsDeleted = true;
+            _commandRepository.Update(request);
+            await _unitOfWork.SaveChangesAsync();
+            return (true, string.Empty);
         }
     }
 }

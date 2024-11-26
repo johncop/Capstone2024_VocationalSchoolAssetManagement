@@ -3,10 +3,10 @@ using ASM.Core.Entities.Common;
 
 namespace ASM.Core.Entities
 {
-    public class LoanRequestDetail : BaseEntity
+    public class RequestDetail : BaseEntity
     {
-        public int LoanRequestId { get; set; }
-        public LoanRequest LoanRequest { get; set; }
+        public int RequestId { get; set; }
+        public Request Request { get; set; }
 
         public int AssetId { get; set; }
         public Asset Asset { get; set; }
@@ -21,6 +21,6 @@ namespace ASM.Core.Entities
         [MaxLength(255)]
         public string Description { get; set; }
 
-        public ICollection<LoanRequestDetailImage> Images { get; set; }
+        public ICollection<RequestDetailImage> Images { get; set; }
     }
 }
