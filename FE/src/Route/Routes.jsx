@@ -24,6 +24,7 @@ import Project from '../Components/Application/Project/Project';
 import Newproject from '../Components/Application/Project/Newproject';
 import AssetList from '../Components/Application/Asset/AssetList';
 import NewAsset from '../Components/Application/Asset/NewAsset';
+import Manager from '../Components/Application/Manager'
 
 export const routes = [
   //dashboard
@@ -42,6 +43,7 @@ export const routes = [
   { path: `${process.env.PUBLIC_URL}/app/project/new-project`, Component: <Newproject /> },
   { path: `${process.env.PUBLIC_URL}/app/asset/asset-list`, Component: <AssetList /> },
   { path: `${process.env.PUBLIC_URL}/app/asset/new-asset`, Component: <NewAsset /> },
+  { path: `${process.env.PUBLIC_URL}/app/manage/home`, Component: <Manager /> },
 
   { path: `${process.env.PUBLIC_URL}/app/ecommerce/product/`, Component: <Products /> },
   { path: `${process.env.PUBLIC_URL}/app/ecommerce/product-page//:id`, Component: <ProductPage /> },

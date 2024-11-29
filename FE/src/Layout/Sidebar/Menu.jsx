@@ -37,13 +37,22 @@ export const MENUITEMS = [
     menucontent: 'Ready to use Apps',
     Items: [
       {
-        title: 'Asset Mangement',
+        title: 'Asset',
         icon: 'project',
         type: 'sub',
         active: false,
         children: [
           { path: `${process.env.PUBLIC_URL}/app/asset/asset-list`, type: 'link', title: 'Asset-List' },
           { path: `${process.env.PUBLIC_URL}/app/asset/new-asset`, type: 'link', title: 'Create New' },
+        ],
+      },
+      {
+        title: 'Mangement',
+        icon: 'project',
+        type: 'sub',
+        active: false,
+        children: [
+          { path: `${process.env.PUBLIC_URL}/app/manage/home`, type: 'link', title: 'Home' },
         ],
       },
       {

@@ -30,9 +30,6 @@ const MyRequests = () => {
               <button key={k} onClick={(e) => activeHandle(k)} className={`frame-box ${isActive === `${k}` && 'active'}`}>
               <div className='currency-widget primary'>
                 <div className='d-flex'>
-                  <div className='currency-icon-widget'>
-                    <SvgIcon iconId='beta' />
-                  </div>
                   <div>
                     <H6>
                       {item.name}
