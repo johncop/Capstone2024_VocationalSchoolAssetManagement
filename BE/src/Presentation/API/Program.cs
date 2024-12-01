@@ -198,7 +198,8 @@ app.Use(async (context, next) =>
 
 app.UseCors(x =>
 {
-    x.AllowAnyOrigin()
+    x.WithOrigins("*")
+     .AllowAnyOrigin()
      .AllowAnyHeader()
      .AllowAnyMethod();
 });
