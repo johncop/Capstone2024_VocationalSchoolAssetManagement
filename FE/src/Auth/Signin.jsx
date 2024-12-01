@@ -5,7 +5,7 @@ import LoginTab from './Tabs/LoginTab';
 import AuthTab from './Tabs/AuthTab';
 
 const Logins = () => {
-  const [selected, setSelected] = useState('simpleLogin');
+  const [selected, setSelected] = useState('jwt');
 
   const callbackNav = (select) => {
     setSelected(select);
@@ -17,15 +17,7 @@ const Logins = () => {
         <Col xs='12'>
           <div className='login-card'>
             <div className='login-main login-tab'>
-              <NavAuth callbackNav={callbackNav} selected={selected} />
-              <TabContent activeTab={selected} className='content-login'>
-                <TabPane className='fade show' tabId={selected === 'simpleLogin' ? 'simpleLogin' : 'jwt'}>
-                  <LoginTab selected={selected} />
-                </TabPane>
-                <TabPane className='fade show' tabId='auth0'>
-                  <AuthTab />
-                </TabPane>
-              </TabContent>
+              <LoginTab selected={selected} />
             </div>
           </div>
         </Col>

@@ -33,6 +33,7 @@
     "knob": "^1.1.0",
     "leaflet": "^1.7.1",
     "pigeon-maps": "^0.21.0",
+    "querystring": "^0.2.1",
     "react-ace": "^9.5.0",
     "react-apexcharts": "^1.4.0",
     "react-big-calendar": "^0.40.0",

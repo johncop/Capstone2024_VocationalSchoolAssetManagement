@@ -1,76 +1,44 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { Btn, H4, P } from '../../../AbstractElements';
 import { EmailAddress, ForgotPassword, LoginWithJWT, Password, RememberPassword, SignIn } from '../../../Constant';
 
-import { useNavigate } from 'react-router-dom';
-import { Jwt_token } from '../../../Config/Config';
-import man from '../../../assets/images/dashboard/profile.png';
-import { handleResponse } from '../../../Services/fack.backend';
-
-import CustomizerContext from '../../../_helper/Customizer';
-import OtherWay from './OtherWay';
+import { toast } from 'react-toastify';
+import authApi from '../../../api/auth/authApi';
 
 const LoginTab = ({ selected }) => {
-  const [email, setEmail] = useState('test@gmail.com');
-  const [password, setPassword] = useState('test123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [togglePassword, setTogglePassword] = useState(false);
-  const history = useNavigate();
-  const { layoutURL } = useContext(CustomizerContext);
-
-  const [value, setValue] = useState(localStorage.getItem('profileURL' || man));
-  const [name, setName] = useState(localStorage.getItem('Name'));
-
-  useEffect(() => {
-    localStorage.setItem('profileURL', man);
-    localStorage.setItem('Name', 'Emay Walter');
-  }, [value, name]);
-
-  const loginAuth = async (e) => {
-    e.preventDefault();
-    setValue(man);
-    setName('Emay Walter');
-    if (email !== '' && password !== '') {
-      localStorage.setItem('login', JSON.stringify(true));
-      history(`${process.env.PUBLIC_URL}/dashboard/default/${layoutURL}`);
-    }
-  };
+  const [logging, setLogging] = useState(false);
 
   const loginWithJwt = (e) => {
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: { email, password },
-    };
+    if (email === '' && password === '') {
+      return toast.error("Input your email and password");
+    }
 
-    return fetch('/users/authenticate', requestOptions)
-      .then(handleResponse)
-      .then((user) => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        setValue(man);
-        setName('Emay Walter');
-        localStorage.setItem('token', Jwt_token);
-        window.location.href = `${process.env.PUBLIC_URL}/dashboard/default/${layoutURL}`;
-        return user;
-      });
+    setLogging(true);
+    authApi.login(email, password).then(response => {
+      if (response.userId) {
+        setLogging(false);
+        window.location.href = `${process.env.PUBLIC_URL}/verify/${response.userId}`;
+      }
+    });
   };
 
   return (
     <Fragment>
-      <Form className='theme-form'>
-        <H4>{selected === 'simpleLogin' ? 'Sign In With Simple Login' : 'Sign In With Jwt'}</H4>
+      <Form className='theme-form' onSubmit={(e) => loginWithJwt(e)}>
+        <H4>Sign In</H4>
         <P>{'Enter your email & password to login'}</P>
         <FormGroup>
           <Label className='col-form-label'>{EmailAddress}</Label>
-          <Input className='form-control' type='email' onChange={(e) => setEmail(e.target.value)} value={email} />
+          <Input className='form-control' type='email' onChange={(e) => setEmail(e.target.value)} value={email} readOnly={logging ? true : false} />
         </FormGroup>
         <FormGroup className='position-relative'>
           <Label className='col-form-label'>{Password}</Label>
           <div className='position-relative'>
-            <Input className='form-control' type={togglePassword ? 'text' : 'password'} onChange={(e) => setPassword(e.target.value)} value={password} />
-            <div className='show-hide' onClick={() => setTogglePassword(!togglePassword)}>
-              <span className={togglePassword ? '' : 'show'}></span>
-            </div>
+            <Input className='form-control' type={togglePassword ? 'text' : 'password'} onChange={(e) => setPassword(e.target.value)} value={password} readOnly={logging ? true : false} />
           </div>
         </FormGroup>
         <div className='position-relative form-group mb-0'>
@@ -83,13 +51,8 @@ const LoginTab = ({ selected }) => {
           <a className='link' href='#javascript'>
             {ForgotPassword}
           </a>
-          {selected === 'simpleLogin' ? (
-            <Btn attrBtn={{ color: 'primary', className: 'd-block w-100 mt-2', onClick: (e) => loginAuth(e) }}>{SignIn}</Btn>
-          ) : (
-            <Btn attrBtn={{ color: 'primary', className: 'd-block w-100 mt-2', onClick: (e) => loginWithJwt(e) }}>{LoginWithJWT}</Btn>
-          )}
+          <Button color='primary' active={logging ? true : false} onClick={(e) => loginWithJwt(e)} className='d-block w-100 mt-2'>{logging ? "Signing....." : "Sign In"}</Button>
         </div>
-        <OtherWay />
       </Form>
     </Fragment>
   );

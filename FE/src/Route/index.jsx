@@ -12,16 +12,10 @@ import PrivateRoute from './PrivateRoute';
 // setup fake backend
 configureFakeBackend();
 const Routers = () => {
-  const login = useState(JSON.parse(localStorage.getItem('login')))[0];
-  const [authenticated, setAuthenticated] = useState(false);
-  const jwt_token = localStorage.getItem('token');
+  const jwt_token = sessionStorage.getItem('token');
 
   useEffect(() => {
     let abortController = new AbortController();
-    const requestOptions = { method: 'GET', headers: authHeader() };
-    fetch('/users', requestOptions).then(handleResponse);
-
-    setAuthenticated(JSON.parse(localStorage.getItem('authenticated')));
     console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
     console.disableYellowBox = true;
     return () => {
@@ -34,14 +28,15 @@ const Routers = () => {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path={'/'} element={<PrivateRoute />}>
-            {login || authenticated || jwt_token ? (
+            {jwt_token ? (
               <>
                 <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/`} />} />
                 <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/`} />} />
               </>
             ) : (
-              ''
+              ""
             )}
+
             <Route path={`/*`} element={<LayoutRoutes />} />
           </Route>
           <Route path={`${process.env.PUBLIC_URL}/callback`} render={() => <Callback />} />

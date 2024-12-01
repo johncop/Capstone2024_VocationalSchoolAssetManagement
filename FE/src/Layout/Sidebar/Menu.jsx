@@ -46,6 +46,17 @@ export const MENUITEMS = [
           { path: `${process.env.PUBLIC_URL}/app/asset/new-asset`, type: 'link', title: 'Create New' },
         ],
       },
+
+      {
+        title: 'Request',
+        icon: 'project',
+        type: 'sub',
+        active: false,
+        children: [
+          { path: `${process.env.PUBLIC_URL}/app/request/history`, type: 'link', title: 'Assigned To Me' },
+          { path: `${process.env.PUBLIC_URL}/app/request/pending`, type: 'link', title: 'Assigned Empty' },
+        ],
+      },
       {
         title: 'Mangement',
         icon: 'project',
