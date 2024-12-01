@@ -7,10 +7,10 @@ namespace ASM.Services.Services
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity
     {
-        private readonly IQueryRepository<TEntity> _queryRepository;
         private readonly ICommandRepository<TEntity> _commandRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IQueryRepository<TEntity> _queryRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public BaseService(IQueryRepository<TEntity> queryRepository, ICommandRepository<TEntity> commandRepository, IUnitOfWork unitOfWork)
         {
@@ -26,7 +26,7 @@ namespace ASM.Services.Services
 
         public async Task<IList<TResponse>> GetAllAsync<TResponse>()
         {
-            return await _queryRepository.GetAllAsync<TResponse>();
+            return await _queryRepository.GetAllAsync<TResponse>(x => !x.IsDeleted);
         }
 
         public IQueryable<TEntity> Find(int id)
@@ -52,7 +52,6 @@ namespace ASM.Services.Services
             {
                 throw ex;
             }
-
         }
         public async Task<string> Delete(int id)
         {
@@ -66,6 +65,5 @@ namespace ASM.Services.Services
             await _unitOfWork.SaveChangesAsync();
             return "";
         }
-
     }
 }

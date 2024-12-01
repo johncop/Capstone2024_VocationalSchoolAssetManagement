@@ -1,4 +1,6 @@
-﻿namespace ASM.Core.Entities
+﻿using ASM.Core.Entities.Enum;
+
+namespace ASM.Core.Entities
 {
     public class Approval
     {
@@ -8,5 +10,6 @@
         public int ApproverId { get; set; }
         public ApplicationUser Approver { get; set; }
         public DateTime ApprovalDate { get; set; }
+        public ApprovalStatusCollection ApprovalStatus { get; set; }
     }
 }
