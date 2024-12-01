@@ -196,12 +196,6 @@ app.Use(async (context, next) =>
         await next();
 });
 
-app.UseCors(x =>
-{
-    x.WithOrigins("*")
-     .AllowAnyOrigin()
-     .AllowAnyHeader()
-     .AllowAnyMethod();
-});
+app.UseCors("corspolicy");
 
 app.Run();
