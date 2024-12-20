@@ -4,6 +4,7 @@ using ASM.Database.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASM.Database.Migrations
 {
     [DbContext(typeof(AssetManagementDbContext))]
-    partial class AssetManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241212134926_AddTableLocationAndDepartmentAndUpdateApprovalAssetTable")]
+    partial class AddTableLocationAndDepartmentAndUpdateApprovalAssetTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,13 +166,7 @@ namespace ASM.Database.Migrations
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsBorrowable")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDummy")
                         .HasColumnType("bit");
 
                     b.Property<int?>("LocationId")
@@ -236,6 +233,51 @@ namespace ASM.Database.Migrations
                         .IsDescending();
 
                     b.ToTable("AssetImages");
+                });
+
+            modelBuilder.Entity("ASM.Core.Entities.AssetTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrentLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RecordDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("Id")
+                        .IsDescending();
+
+                    b.ToTable("AssetTransactions");
                 });
 
             modelBuilder.Entity("ASM.Core.Entities.AssetType", b =>
@@ -610,9 +652,6 @@ namespace ASM.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ActualDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -622,17 +661,8 @@ namespace ASM.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("ReceivedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RequestCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("RequestType")
-                        .HasColumnType("int");
 
                     b.Property<int>("RequesterId")
                         .HasColumnType("int");
@@ -690,9 +720,6 @@ namespace ASM.Database.Migrations
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -742,51 +769,6 @@ namespace ASM.Database.Migrations
                     b.HasIndex("RequestDetailId");
 
                     b.ToTable("RequestDetailImage");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.TransactionRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AssetId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurrentLocation")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastLocation")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("RecordDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetId");
-
-                    b.HasIndex("Id")
-                        .IsDescending();
-
-                    b.ToTable("TransactionRecords");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -976,6 +958,17 @@ namespace ASM.Database.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("ASM.Core.Entities.AssetTransaction", b =>
+                {
+                    b.HasOne("ASM.Core.Entities.Asset", "Asset")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
             modelBuilder.Entity("ASM.Core.Entities.AssetType", b =>
                 {
                     b.HasOne("ASM.Core.Entities.Category", "Category")
@@ -1091,17 +1084,6 @@ namespace ASM.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("RequestDetail");
-                });
-
-            modelBuilder.Entity("ASM.Core.Entities.TransactionRecord", b =>
-                {
-                    b.HasOne("ASM.Core.Entities.Asset", "Asset")
-                        .WithMany("Transactions")
-                        .HasForeignKey("AssetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

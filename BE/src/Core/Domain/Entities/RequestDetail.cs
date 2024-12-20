@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ASM.Core.Entities.Common;
+using ASM.Core.Entities.Enum;
 
 namespace ASM.Core.Entities
 {
@@ -20,7 +21,7 @@ namespace ASM.Core.Entities
 
         [MaxLength(255)]
         public string Description { get; set; }
-
+        public DetailStatusCollection Status { get; set; }
         public ICollection<RequestDetailImage> Images { get; set; }
     }
 }

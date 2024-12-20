@@ -3,11 +3,13 @@ namespace ASM.Core.Entities.Enum
     public enum RequestStatusCollection
     {
         Pending,
-        Rejected,
         Overdue,
         InProgress,
         Cancelled,
-        Expired
+        Expired,
+        Approved,
+        Completed,
+        Failed
     }
 
     public enum RequestDetailStatusCollection

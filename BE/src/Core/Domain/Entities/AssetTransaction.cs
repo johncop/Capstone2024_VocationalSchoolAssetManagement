@@ -1,15 +1,20 @@
-﻿using ASM.Core.Entities.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using ASM.Core.Entities.Common;
 
 namespace ASM.Core.Entities
 {
-    public class AssetTransaction : BaseEntity
+    public class TransactionRecord : BaseEntity
     {
-        public string Description { get; set; }
-        public int Status { get; set; }
+        [MaxLength(255)]
+        public string? Description { get; set; }
 
         public DateTime RecordDate { get; set; }
+
+        [MaxLength(50)]
         public string LastLocation { get; set; }
-        public string CurrentLocation {  get; set; }
+
+        [MaxLength(50)]
+        public string CurrentLocation { get; set; }
 
 
         #region CONFIG RELATIONSHIP

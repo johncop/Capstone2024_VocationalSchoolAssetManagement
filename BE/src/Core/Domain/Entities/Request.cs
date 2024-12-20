@@ -1,4 +1,5 @@
 ﻿using ASM.Core.Entities.Common;
+using ASM.Core.Entities.Enum;
 
 namespace ASM.Core.Entities
 {
@@ -9,6 +10,10 @@ namespace ASM.Core.Entities
         public DateTime RequestDate { get; set; }
 
         public bool IsApproved { get; set; }
+        public RequestTypeCollection RequestType { get; set; }
+        public string RequestCode { get; set; }
+        public DateTime ActualDate { get; set; }
+        public DateTime ReceivedDate { get; set; }
 
         #region CONFIG  RELATIONSHIP
         public int RequesterId { get; set; }

@@ -24,7 +24,9 @@ namespace ASM.Database.Data
         public DbSet<AssetImage> AssetImages { get; set; }
         public DbSet<MaintenanceImage> MaintenanceImages { get; set; }
         public DbSet<DepreciationImage> DepreciationImages { get; set; }
-        public DbSet<AssetTransaction> AssetTransactions { get; set; }
+        public DbSet<TransactionRecord> TransactionRecords { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
