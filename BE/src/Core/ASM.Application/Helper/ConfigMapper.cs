@@ -67,7 +67,7 @@ namespace ASM.WebApi.Helper
             CreateMap<AddCategoryBindingModel, Category>();
             CreateMap<UpdateCategoryBindingModel, Category>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name ?? dest.Name))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom((src, dest) => src.Name ?? dest.Name));
+                .ForMember(dest => dest.Description, opt => opt.MapFrom((src, dest) => src.Description ?? dest.Description));
             CreateMap<Category, CategoryResponseDTO>();
         }
 
