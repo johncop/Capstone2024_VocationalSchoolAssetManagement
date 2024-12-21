@@ -5,7 +5,7 @@ import PrivateRoute from "./privateRoute";
 import LayoutRoutes from "./layoutRoute";
 import { authRoutes } from "./authRoutes";
 
-export const Routers = () => {
+const Routers = () => {
     return (
         <BrowserRouter basename="/">
             <Suspense fallback={<LoadingPage />}>
@@ -22,3 +22,5 @@ export const Routers = () => {
         </BrowserRouter>
     )
 }
+
+export default Routers;
