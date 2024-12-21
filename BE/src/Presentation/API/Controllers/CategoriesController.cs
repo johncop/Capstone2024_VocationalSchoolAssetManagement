@@ -16,10 +16,12 @@ namespace ASM.WebApi.Controllers
     public class CategoriesController : BaseApi
     {
         private readonly IBaseService<Category> _baseService;
+        private readonly IMapper _mapper;
 
         public CategoriesController(IBaseService<Category> baseService, IMapper mapper) : base (mapper)
         {
             _baseService = baseService;
+            _mapper = mapper;
         }
 
         [HttpGet]

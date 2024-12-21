@@ -83,7 +83,6 @@ namespace ASM.Services.Services
                     {
                         AssetId = asset.Id,
                         Description = detail.Description,
-                        Quantity = detail.Quantity,
                         ReturnDate = detail.ReturnDate
                     });
                 }
@@ -134,7 +133,6 @@ namespace ASM.Services.Services
                 {
                     AssetId = assets.First(y => y.Id == x.AssetId).Id,
                     Description = x.Description,
-                    Quantity = x.Quantity,
                     ReturnDate = x.ReturnDate
                 }).ToList();
             }
@@ -160,7 +158,6 @@ namespace ASM.Services.Services
             }
 
             approval.ApprovalDate = DateTime.UtcNow;
-            request.IsApproved = true;
 
             _commandRepository.Update(request);
             await _unitOfWork.SaveChangesAsync();

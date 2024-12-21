@@ -15,10 +15,12 @@ namespace ASM.WebApi.Controllers
     public class DepreciationController : BaseApi
     {
         private readonly IBaseService<Depreciation> _baseService;
+        private readonly IMapper _mapper;
 
         public DepreciationController(IBaseService<Depreciation> baseService, IMapper mapper): base(mapper)
         {
             _baseService = baseService;
+            _mapper = mapper;
         }
 
         [HttpGet]

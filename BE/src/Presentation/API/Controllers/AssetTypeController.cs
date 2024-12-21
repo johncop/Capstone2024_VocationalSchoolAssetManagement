@@ -16,10 +16,12 @@ namespace ASM.WebApi.Controllers
     public class AssetTypeController : BaseApi
     {
         private readonly IBaseService<AssetType> _baseService;
+        private readonly IMapper _mapper;
 
         public AssetTypeController(IBaseService<AssetType> baseService, IMapper mapper) : base (mapper)
         {
             _baseService = baseService;
+            _mapper = mapper;
         }
 
         [HttpGet]

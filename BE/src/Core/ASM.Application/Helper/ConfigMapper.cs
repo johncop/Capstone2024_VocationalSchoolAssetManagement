@@ -33,7 +33,6 @@ namespace ASM.WebApi.Helper
             CreateMap<UpdateAssetBindingModel, Asset>()
                 .ForMember(x => x.Name, opt => opt.MapFrom((src, dest) => src.Name ?? dest.Name))
                 .ForMember(x => x.SerialNumber, opt => opt.MapFrom((src, dest) => src.SerialNumber ?? dest.SerialNumber))
-                .ForMember(x => x.Condition, opt => opt.MapFrom((src, dest) => src.Condition ?? dest.Condition))
                 .ForMember(x => x.Status, opt => opt.MapFrom((src, dest) => src.Status))
                 .ForMember(x => x.AssetTypeId, opt => opt.MapFrom((src, dest) => src.AssetTypeId ?? dest.AssetTypeId));
             CreateMap<Asset, AssetResponseDTO>()
@@ -85,10 +84,8 @@ namespace ASM.WebApi.Helper
                     Id = x.Id,
                     Description = x.Description,
                     AssetName = x.Asset.Name,
-                    Quantity = x.Quantity,
                     ReturnDate = x.ReturnDate,
                     ActualReturnDate = x.ActualReturnDate,
-                    ConditionOnReturn = x.ConditionOnReturn
                 }).ToList()));
             CreateMap<RequestDetail, RequestDetailResponseDTO>();
 
@@ -96,8 +93,7 @@ namespace ASM.WebApi.Helper
             CreateMap<CreateRequestDetailBindingModel, RequestDetail>();
             CreateMap<UpdateRequestBindingModel, Request>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom((src, dest) => dest.Id))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom((src, dest) => src.Status ?? dest.Status))
-                .ForMember(dest => dest.IsApproved, opt => opt.MapFrom((src, dest) => src.IsApproved ?? dest.IsApproved));
+                .ForMember(dest => dest.Status, opt => opt.MapFrom((src, dest) => src.Status ?? dest.Status));
         }
 
         private void UserConfiguration()

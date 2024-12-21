@@ -16,10 +16,12 @@ namespace ASM.WebApi.Controllers
     public class MaintenanceController : BaseApi
     {
         private readonly IBaseService<Maintenance> _baseService;
+        private readonly IMapper _mapper;
 
         public MaintenanceController(IBaseService<Maintenance> baseService, IMapper mapper) : base(mapper)
         {
             _baseService = baseService;
+            _mapper = mapper;
         }
 
         [HttpGet]

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using ASM.Core.Entities.Common;
 using ASM.Core.Entities.Enum;
 
@@ -8,14 +9,17 @@ namespace ASM.Core.Entities
     {
         [MaxLength(50)]
         public string Name { get; set; }
-        public int SerialNumber { get; set; }
-
-        [MaxLength(100)]
-        public string Condition { get; set; }
+        public string SerialNumber { get; set; }
 
         public AssetStatusCollection Status { get; set; }
         public bool IsBorrowable { get; set; }
         public bool IsDummy { get; set; }
+        [AllowNull]
+        public string QrCodeUrl {  get; set; }
+        [AllowNull, MaxLength(255)]
+        public string Description {  get; set; }
+        [AllowNull]
+        public string ImageUrl { get; set; }
 
         #region CONFIG RELATIONSHIP
         public int AssetTypeId { get; set; }

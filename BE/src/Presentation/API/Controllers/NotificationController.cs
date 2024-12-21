@@ -5,6 +5,7 @@ using ASM.Core.BindingModels.Notification;
 using ASM.Core.DTOs.Notification;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
+using ASM.Services.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,16 @@ namespace ASM.WebApi.Controllers
     public class NotificationController : BaseApi
     {
         private readonly IBaseService<Notification> _baseService;
+        private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
+        private readonly IUserService _userService;
 
-        public NotificationController(IBaseService<Notification> baseService, IMapper mapper) : base(mapper)
+        public NotificationController(IBaseService<Notification> baseService, IMapper mapper, INotificationService notificationService, IUserService userService) : base(mapper)
         {
             _baseService = baseService;
+            _mapper = mapper;
+            _notificationService = notificationService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -58,7 +65,16 @@ namespace ASM.WebApi.Controllers
         public async Task<IResponse> Delete(int id)
         {
             var message = await _baseService.Delete(id);
-            return Success(message : message);
+            return Success(message: message);
+        }
+
+        [HttpGet]
+        public async Task<IResponse> GetNotificationByCurrentUser()
+        {
+            var currentUser = await _userService.GetCurrentUserAsync();
+
+            var request = await _notificationService.GetAllAsync(x => x.UserId == currentUser.Id);
+            return Success(data: request);
         }
     }
 }

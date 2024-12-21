@@ -81,5 +81,32 @@ namespace ASM.WebApi.Controllers
             }
             return Success("Request deleted successfully");
         }
+
+        [HttpGet]
+        public async Task<IResponse> GetRequestByStatus(int status)
+        {
+            var currentUser = await _userService.GetCurrentUserAsync();
+
+            var request = await _requestService.GetAsync(x => x.RequesterId == currentUser.Id && x.Status == status);
+            return Success(data: request);
+        }
+
+        [HttpGet]
+        public async Task<IResponse> GetRequestByRequestType(int requestType)
+        {
+            var currentUser = await _userService.GetCurrentUserAsync();
+
+            var request = await _requestService.GetAsync(x => x.RequesterId == currentUser.Id && (int)x.RequestType == requestType);
+            return Success(data: request);
+        }
+
+        [HttpGet]
+        public async Task<IResponse> GetRequestByRequestCode(string requestCode)
+        {
+            var currentUser = await _userService.GetCurrentUserAsync();
+
+            var request = await _requestService.GetAsync(x => x.RequesterId == currentUser.Id && x.RequestCode.Contains(requestCode));
+            return Success(data: request);
+        }
     }
 }
