@@ -16,7 +16,7 @@ namespace ASM.WebApi.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("/getLoanDetailByRequestId")]
         public IActionResult GetLoanDetailByRequestId(int requestId)
         {
             try
@@ -58,7 +58,7 @@ namespace ASM.WebApi.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/getLoanDetailByStatus")]
         public IActionResult GetLoanDetailByStatus(int status)
         {
             try

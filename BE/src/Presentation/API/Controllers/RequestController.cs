@@ -82,7 +82,7 @@ namespace ASM.WebApi.Controllers
             return Success("Request deleted successfully");
         }
 
-        [HttpGet]
+        [HttpGet("/getByStatus")]
         public async Task<IResponse> GetRequestByStatus(int status)
         {
             var currentUser = await _userService.GetCurrentUserAsync();
@@ -91,7 +91,7 @@ namespace ASM.WebApi.Controllers
             return Success(data: request);
         }
 
-        [HttpGet]
+        [HttpGet("/getByRequestType")]
         public async Task<IResponse> GetRequestByRequestType(int requestType)
         {
             var currentUser = await _userService.GetCurrentUserAsync();
@@ -100,7 +100,7 @@ namespace ASM.WebApi.Controllers
             return Success(data: request);
         }
 
-        [HttpGet]
+        [HttpGet("/getByRequestCode")]
         public async Task<IResponse> GetRequestByRequestCode(string requestCode)
         {
             var currentUser = await _userService.GetCurrentUserAsync();

@@ -4,8 +4,8 @@ using ASM.Application.Shared;
 using ASM.Core.BindingModels.Notification;
 using ASM.Core.DTOs.Notification;
 using ASM.Core.Entities;
+using ASM.Database.Data;
 using ASM.Services.Interfaces;
-using ASM.Services.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +18,14 @@ namespace ASM.WebApi.Controllers
     {
         private readonly IBaseService<Notification> _baseService;
         private readonly IMapper _mapper;
-        private readonly INotificationService _notificationService;
+        private readonly AssetManagementDbContext _context;
         private readonly IUserService _userService;
 
-        public NotificationController(IBaseService<Notification> baseService, IMapper mapper, INotificationService notificationService, IUserService userService) : base(mapper)
+        public NotificationController(IBaseService<Notification> baseService, IMapper mapper, AssetManagementDbContext context, IUserService userService) : base(mapper)
         {
             _baseService = baseService;
             _mapper = mapper;
-            _notificationService = notificationService;
+            _context = context;
             _userService = userService;
         }
 
@@ -68,12 +68,12 @@ namespace ASM.WebApi.Controllers
             return Success(message: message);
         }
 
-        [HttpGet]
+        [HttpGet("/getNoticationByCurrentUser")]
         public async Task<IResponse> GetNotificationByCurrentUser()
         {
             var currentUser = await _userService.GetCurrentUserAsync();
 
-            var request = await _notificationService.GetAllAsync(x => x.UserId == currentUser.Id);
+            var request = _context.Notifications.Where(x => x.UserId == currentUser.Id).ToList();
             return Success(data: request);
         }
     }

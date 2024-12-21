@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace ASM.Services.Services
 {
-    internal class NotificationService : INotificationService
+    public class NotificationService : INotificationService
     {
         private readonly IQueryRepository<Notification> _queryRepository;
         public NotificationService(IQueryRepository<Notification> queryRepository)
