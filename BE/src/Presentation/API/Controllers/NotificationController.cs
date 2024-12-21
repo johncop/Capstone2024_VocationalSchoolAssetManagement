@@ -7,6 +7,7 @@ using ASM.Core.Entities;
 using ASM.Database.Data;
 using ASM.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ namespace ASM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class NotificationController : BaseApi
     {
         private readonly IBaseService<Notification> _baseService;
