@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using ASM.Core.DTOs.Category;
 using AutoMapper;
+using ASM.Core.BindingModels.Location;
 
 namespace ASM.WebApi.Controllers
 {
@@ -36,7 +37,7 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] AddCategoryBindingModel category)
+        public async Task<IResponse> Create([FromBody] AddLocationBindingModel category)
         {
             return Success(data: _mapper.Map<CategoryResponseDTO>(await _baseService.Crete(_mapper.Map<Category>(category))));
         }

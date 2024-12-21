@@ -18,8 +18,7 @@ namespace ASM.Core.Entities
         public string QrCodeUrl {  get; set; }
         [AllowNull, MaxLength(255)]
         public string Description {  get; set; }
-        [AllowNull]
-        public string ImageUrl { get; set; }
+
 
         #region CONFIG RELATIONSHIP
         public int AssetTypeId { get; set; }
