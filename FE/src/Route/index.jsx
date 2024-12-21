@@ -1,53 +1,24 @@
-import React from 'react';
-import { Suspense, useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { configureFakeBackend, authHeader, handleResponse } from '../Services/fack.backend';
-import Callback from '../Auth/Callback';
-import Loader from '../Layout/Loader';
-import { authRoutes } from './AuthRoutes';
-import LayoutRoutes from '../Route/LayoutRoutes';
-import Signin from '../Auth/Signin';
-import PrivateRoute from './PrivateRoute';
+import { Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoadingPage from "../layout/loading";
+import PrivateRoute from "./privateRoute";
+import LayoutRoutes from "./layoutRoute";
+import { authRoutes } from "./authRoutes";
 
-// setup fake backend
-configureFakeBackend();
-const Routers = () => {
-  const jwt_token = sessionStorage.getItem('token');
-
-  useEffect(() => {
-    let abortController = new AbortController();
-    console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
-    console.disableYellowBox = true;
-    return () => {
-      abortController.abort();
-    };
-  }, []);
-
-  return (
-    <BrowserRouter basename={'/'}>
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route path={'/'} element={<PrivateRoute />}>
-            {jwt_token ? (
-              <>
-                <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/`} />} />
-                <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/dashboard/default/`} />} />
-              </>
-            ) : (
-              ""
-            )}
-
-            <Route path={`/*`} element={<LayoutRoutes />} />
-          </Route>
-          <Route path={`${process.env.PUBLIC_URL}/callback`} render={() => <Callback />} />
-          <Route exact path={`${process.env.PUBLIC_URL}/login`} element={<Signin />} />
-          {authRoutes.map(({ path, Component }, i) => (
-            <Route path={path} element={Component} key={i} />
-          ))}
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  );
-};
-
-export default Routers;
+export const Routers = () => {
+    return (
+        <BrowserRouter basename="/">
+            <Suspense fallback={<LoadingPage />}>
+                <Routes>
+                    <Route path={'/'} element={<PrivateRoute />}>
+                        <Route path={`/`} element={<LayoutRoutes />} />
+                        <Route path={`/*`} element={<LayoutRoutes />} />
+                    </Route>
+                    {authRoutes.map(({ path, component }, i) => (
+                        <Route path={path} element={component} key={i}></Route>
+                    ))}
+                </Routes>
+            </Suspense>
+        </BrowserRouter>
+    )
+}
