@@ -6,6 +6,7 @@
         IList<TEntity> GetAll();
         Task<IList<TResponse>> GetAllAsync<TResponse>();
         IQueryable<TEntity> Find(int id);
+        IQueryable<TEntity> InitQuery();
         #endregion
 
         #region Command

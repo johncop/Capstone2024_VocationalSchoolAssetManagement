@@ -29,6 +29,8 @@ namespace ASM.Services.Services
             return await _queryRepository.GetAllAsync<TResponse>(x => !x.IsDeleted);
         }
 
+        public IQueryable<TEntity> InitQuery() => _queryRepository.InitQuery();
+
         public IQueryable<TEntity> Find(int id)
         {
             return _queryRepository.Find(x => x.Id == id);
