@@ -150,7 +150,6 @@ services.AddScoped(typeof(IAuthService), typeof(AuthService));
 services.AddSingleton<IBlobService, BlobService>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IRequestService, RequestService>();
-services.AddScoped<INotificationService, NotificationService>();
 
 services.AddHttpContextAccessor();
 services.AddAutoMapper(typeof(ConfigMapper));
