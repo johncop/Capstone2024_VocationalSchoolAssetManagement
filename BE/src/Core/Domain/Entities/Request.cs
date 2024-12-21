@@ -1,5 +1,7 @@
 ﻿using ASM.Core.Entities.Common;
 using ASM.Core.Entities.Enum;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASM.Core.Entities
 {
@@ -11,6 +13,8 @@ namespace ASM.Core.Entities
 
         public RequestTypeCollection RequestType { get; set; }
         public string RequestCode { get; set; }
+        [MaxLength(255), AllowNull]
+        public string Description { get; set; }
 
         #region CONFIG  RELATIONSHIP
         public int RequesterId { get; set; }

@@ -14,6 +14,7 @@ namespace ASM.Core.Entities
         #region CONFIG RELATIONSHIP
         public ICollection<Approval> Approvals { get; set; }
         public ICollection<Request> Requests { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
         #endregion
     }
 }
