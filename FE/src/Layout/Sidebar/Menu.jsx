@@ -1,4 +1,4 @@
-import { DatabaseOutlined, DesktopOutlined, HddOutlined, ProductOutlined, TagOutlined } from "@ant-design/icons";
+import { DatabaseOutlined, DesktopOutlined, HddOutlined, ProductOutlined, TagOutlined, SnippetsOutlined } from "@ant-design/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -47,12 +47,43 @@ export const MenuItems = [
         icon: React.createElement(DatabaseOutlined),
         children: [
             {
-
                 key: 'g7',
                 label: 'Create New',
             },
             {
                 key: 'g8',
+                label: 'All',
+            },
+        ],
+    },
+    {
+        key: 'sub5',
+        label: <Link to={"maintaince-record"}>Maintaince Record</Link>,
+        icon: React.createElement(DatabaseOutlined),
+        children: [
+            {
+
+                key: 'g9',
+                label: 'Create New',
+            },
+            {
+                key: 'g10',
+                label: 'All',
+            },
+        ],
+    },
+    {
+        key: 'sub6',
+        label: <Link to={"transaction-record"}>Transaction Record</Link>,
+        icon: React.createElement(SnippetsOutlined),
+        children: [
+            {
+
+                key: 'g11',
+                label: 'Create New',
+            },
+            {
+                key: 'g12',
                 label: 'All',
             },
         ],
