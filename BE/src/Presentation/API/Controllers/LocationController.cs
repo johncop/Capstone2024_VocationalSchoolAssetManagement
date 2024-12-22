@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Asset;
 using ASM.Core.BindingModels.AssetType;
 using ASM.Core.BindingModels.Location;
 using ASM.Core.DTOs.Asset;
@@ -8,6 +9,7 @@ using ASM.Core.DTOs.Location;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,9 +30,19 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll()
+        public async Task<IResponse> GetAll([FromQuery] LocationFilterBindingModel filterModel)
         {
-            return Success(data: await _baseService.GetAllAsync<LocationResponseDTO>());
+            var assets = _baseService.InitQuery();
+
+            if (filterModel.Name != null)
+            {
+                assets = assets.Where(x => x.Name.ToLower().Contains(filterModel.Name.ToLower()));
+            }
+            if (filterModel.Status != null)
+            {
+                assets = assets.Where(x => x.Status == filterModel.Status);
+            }
+            return Success(data: await assets.ProjectTo<LocationResponseDTO>(_mapper.ConfigurationProvider).ToListAsync());
         }
 
         [HttpGet("{id:int}")]

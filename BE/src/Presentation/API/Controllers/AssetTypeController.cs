@@ -1,11 +1,13 @@
 ﻿using System.Net;
 using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Asset;
 using ASM.Core.BindingModels.AssetType;
 using ASM.Core.DTOs.Asset;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,8 +27,20 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll() =>
-            Success<IList<AssetTypeResponseDTO>>(data: await _baseService.GetAllAsync<AssetTypeResponseDTO>());
+        public async Task<IResponse> GetAll([FromQuery] AssetTypeFilterBindingModel filterModel)
+        {
+            var assets = _baseService.InitQuery();
+
+            if (filterModel.Name != null)
+            {
+                assets = assets.Where(x => x.Name.ToLower().Contains(filterModel.Name.ToLower()));
+            }
+            if (filterModel.CategoryId != null)
+            {
+                assets = assets.Where(x => x.CategoryId == filterModel.CategoryId);
+            }
+            return Success(data: await assets.ProjectTo<AssetTypeResponseDTO>(_mapper.ConfigurationProvider).ToListAsync());
+        }
 
         [HttpGet("{id:int}")]
         public IResponse Get(int id)

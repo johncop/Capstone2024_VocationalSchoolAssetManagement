@@ -8,7 +8,6 @@ namespace ASM.Core.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public int Status { get; set; }
 
         public DateTime MaintenanceDate { get; set; }
 

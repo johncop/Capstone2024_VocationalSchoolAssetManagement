@@ -1,4 +1,5 @@
 using ASM.Core.BindingModels.Asset;
+using ASM.Core.BindingModels.AssetTranscation;
 using ASM.Core.BindingModels.AssetType;
 using ASM.Core.BindingModels.Category;
 using ASM.Core.BindingModels.Department;
@@ -7,6 +8,7 @@ using ASM.Core.BindingModels.Location;
 using ASM.Core.BindingModels.Maintenance;
 using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Asset;
+using ASM.Core.DTOs.AssetTranscation;
 using ASM.Core.DTOs.Category;
 using ASM.Core.DTOs.Department;
 using ASM.Core.DTOs.Depreciation;
@@ -32,6 +34,7 @@ namespace ASM.WebApi.Helper
             DeparmentConfiguration();
             LoanRequestConfiguration();
             MaintenanceConfiguration();
+            AssetTranscationConfiguration();
             UserConfiguration();
         }
 
@@ -85,6 +88,11 @@ namespace ASM.WebApi.Helper
         {
             CreateMap<CreateMaintenanceBindingModel, Maintenance>();
             CreateMap<Maintenance, MaintenanceResponseDTO>();
+        }
+        private void AssetTranscationConfiguration()
+        {
+            CreateMap<CreateTranscationBindingModel, TransactionRecord>();
+            CreateMap<TransactionRecord, AssetTranscationResponseDTO>();
         }
         private void LocationConfiguration()
         {
