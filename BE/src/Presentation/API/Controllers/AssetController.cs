@@ -35,10 +35,21 @@ namespace ASM.WebApi.Controllers
             {
                 assets = assets.Where(x => x.Name.ToLower().Contains(filterModel.Name.ToLower()));
             }
-
+            if (filterModel.SerialNumber != null)
+            {
+                assets = assets.Where(x => x.Name.ToLower().Contains(filterModel.SerialNumber.ToLower()));
+            }
             if (filterModel.Status != null)
             {
                 assets = assets.Where(x => x.Status == filterModel.Status);
+            }
+            if (filterModel.LocationId != null)
+            {
+                assets = assets.Where(x => x.LocationId == filterModel.LocationId);
+            }
+            if (filterModel.DepartmentId != null)
+            {
+                assets = assets.Where(x => x.DepartmentId == filterModel.DepartmentId);
             }
             return Success(data: await assets.ProjectTo<AssetResponseDTO>(_mapper.ConfigurationProvider).ToListAsync());
         }
