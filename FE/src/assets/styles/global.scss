@@ -1,0 +1,75 @@
+@use "variables" as *;
+@use "mixins" as *;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Inter", sans-serif;
+  color: $primary-text;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  background-color: #eaecf0;
+  position: relative;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-width: thin;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+button,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  line-height: 0;
+  touch-action: manipulation;
+}
+ul {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+table {
+  margin-bottom: unset !important;
+}
+.form-check-input:disabled {
+  background-color: #aaaaaa;
+  border-color: #aaaaaa;
+  opacity: 1;
+}
+::selection {
+  background-color: #0050b3;
+  color: $light-color;
+}
