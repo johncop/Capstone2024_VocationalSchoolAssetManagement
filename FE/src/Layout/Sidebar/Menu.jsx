@@ -1,4 +1,4 @@
-import { DatabaseOutlined, DesktopOutlined, HddOutlined, ProductOutlined, TagOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { DatabaseOutlined, DesktopOutlined, HomeOutlined, ProductOutlined, TagOutlined, SnippetsOutlined, CopyOutlined } from "@ant-design/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -22,8 +22,18 @@ export const MenuItems = [
     },
     {
         key: 'sub2',
-        label: <Link to={"asset-categories"}>Asset Category</Link>,
+        label: 'Asset Category',
         icon: React.createElement(DesktopOutlined),
+        children: [
+            {
+                key: 'g3',
+                label: 'Create New',
+            },
+            {
+                key: 'g4',
+                label: <Link to={"asset-categories"}>All</Link>,
+            },
+        ],
     },
     {
         key: 'sub3',
@@ -31,13 +41,12 @@ export const MenuItems = [
         icon: React.createElement(TagOutlined),
         children: [
             {
-
                 key: 'g5',
                 label: 'Create New',
             },
             {
                 key: 'g6',
-                label: 'All',
+                label: <Link to={"assets-type"}>All</Link>,
             },
         ],
     },
@@ -52,14 +61,14 @@ export const MenuItems = [
             },
             {
                 key: 'g8',
-                label: 'All',
+                label: <Link to={"request"}>All</Link>,
             },
         ],
     },
     {
         key: 'sub5',
-        label: <Link to={"maintaince-record"}>Maintaince Record</Link>,
-        icon: React.createElement(DatabaseOutlined),
+        label: 'Maintaince Record',
+        icon: React.createElement(CopyOutlined),
         children: [
             {
 
@@ -68,7 +77,7 @@ export const MenuItems = [
             },
             {
                 key: 'g10',
-                label: 'All',
+                label: <Link to={"maintaince-record"}>All</Link>,
             },
         ],
     },
@@ -85,6 +94,22 @@ export const MenuItems = [
             {
                 key: 'g12',
                 label: 'All',
+            },
+        ],
+    },
+    {
+        key: 'sub7',
+        label: <Link to={"department"}>Department</Link>,
+        icon: React.createElement(HomeOutlined),
+        children: [
+            {
+
+                key: 'g11',
+                label: 'Create New',
+            },
+            {
+                key: 'g12',
+                label: <Link to={"department"}>All</Link>,
             },
         ],
     },
