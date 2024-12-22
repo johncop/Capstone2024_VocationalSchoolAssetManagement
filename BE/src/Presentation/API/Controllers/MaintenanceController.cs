@@ -1,12 +1,17 @@
 ﻿using System.Net;
 using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
+using ASM.Core.BindingModels.Asset;
+using ASM.Core.BindingModels.AssetType;
 using ASM.Core.BindingModels.Maintaince;
+using ASM.Core.BindingModels.Maintenance;
+using ASM.Core.DTOs.Asset;
 using ASM.Core.DTOs.Maintaince;
 using ASM.Core.Entities;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ASM.WebApi.Controllers
@@ -35,12 +40,24 @@ namespace ASM.WebApi.Controllers
             var maintaince = _baseService.Find(id);
             return Success<IQueryable>(data: maintaince);
         }
+        [HttpGet("by-asset-id")]
+        public IResponse GetByAssetId([FromQuery] MaintenanceFilterBindingModel filter)
+        {
+            var assets = _baseService.InitQuery();
+
+            if (filter.assetId != null)
+            {
+                assets = assets.Where(x => x.AssetId == filter.assetId);
+            }
+            return Success<IQueryable>(data: assets);
+        }
+
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] Maintenance maintaince)
+        public async Task<IResponse> Create([FromForm] CreateMaintenanceBindingModel maintaince)
         {
-            var result = await _baseService.Crete(maintaince);
-            return Success(data: result.Id);
+            var dataResp = await _baseService.Crete(_mapper.Map<Maintenance>(maintaince));
+            return Success(data: _mapper.Map<MaintenanceResponseDTO>(dataResp));
         }
 
         [HttpPut("{id:int}")]

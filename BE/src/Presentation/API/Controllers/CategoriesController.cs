@@ -9,6 +9,9 @@ using System.Net;
 using ASM.Core.DTOs.Category;
 using AutoMapper;
 using ASM.Core.BindingModels.Location;
+using ASM.Core.BindingModels.Asset;
+using ASM.Core.DTOs.Asset;
+using AutoMapper.QueryableExtensions;
 
 namespace ASM.WebApi.Controllers
 {
@@ -26,8 +29,16 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IResponse> GetAll() =>
-            Success<IList<CategoryResponseDTO>>(data: await _baseService.GetAllAsync<CategoryResponseDTO>());
+        public async Task<IResponse> GetAll([FromQuery] CategoryFilterBindingModel filterModel)
+        {
+            var categories = _baseService.InitQuery();
+
+            if (filterModel.Name != null)
+            {
+                categories = categories.Where(x => x.Name.ToLower().Contains(filterModel.Name.ToLower()));
+            }
+            return Success(data: await categories.ProjectTo<CategoryResponseDTO>(_mapper.ConfigurationProvider).ToListAsync());
+        }
 
         [HttpGet("{id:int}")]
         public async Task<IResponse> Get(int id)

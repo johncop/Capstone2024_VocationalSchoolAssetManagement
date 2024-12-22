@@ -4,6 +4,7 @@ using ASM.Core.BindingModels.Category;
 using ASM.Core.BindingModels.Department;
 using ASM.Core.BindingModels.Depreciation;
 using ASM.Core.BindingModels.Location;
+using ASM.Core.BindingModels.Maintenance;
 using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Asset;
 using ASM.Core.DTOs.Category;
@@ -11,6 +12,7 @@ using ASM.Core.DTOs.Department;
 using ASM.Core.DTOs.Depreciation;
 using ASM.Core.DTOs.Image;
 using ASM.Core.DTOs.Location;
+using ASM.Core.DTOs.Maintaince;
 using ASM.Core.DTOs.Request;
 using ASM.Core.DTOs.User;
 using ASM.Core.Entities;
@@ -29,6 +31,7 @@ namespace ASM.WebApi.Helper
             LocationConfiguration();
             DeparmentConfiguration();
             LoanRequestConfiguration();
+            MaintenanceConfiguration();
             UserConfiguration();
         }
 
@@ -77,6 +80,11 @@ namespace ASM.WebApi.Helper
                 .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name ?? dest.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom((src, dest) => src.Description ?? dest.Description));
             CreateMap<Category, CategoryResponseDTO>();
+        }
+        private void MaintenanceConfiguration()
+        {
+            CreateMap<CreateMaintenanceBindingModel, Maintenance>();
+            CreateMap<Maintenance, MaintenanceResponseDTO>();
         }
         private void LocationConfiguration()
         {
