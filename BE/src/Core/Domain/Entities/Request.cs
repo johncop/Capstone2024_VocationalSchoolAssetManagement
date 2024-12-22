@@ -7,7 +7,7 @@ namespace ASM.Core.Entities
 {
     public class Request : BaseEntity
     {
-        public int Status { get; set; }
+        public RequestStatusCollection Status { get; set; }
 
         public DateTime RequestDate { get; set; }
 

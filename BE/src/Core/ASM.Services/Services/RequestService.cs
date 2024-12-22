@@ -4,6 +4,7 @@ using System.Net;
 using ASM.Core.BindingModels.Request;
 using ASM.Core.DTOs.Request;
 using ASM.Core.Entities;
+using ASM.Core.Entities.Enum;
 using ASM.Repositories.Interfaces;
 using ASM.Services.Interfaces;
 using AutoMapper;
@@ -55,6 +56,7 @@ namespace ASM.Services.Services
         {
             try
             {
+
                 var currentUser = await _userService.GetCurrentUserAsync();
                 if (currentUser is null)
                 {
@@ -71,22 +73,97 @@ namespace ASM.Services.Services
                 loanRequest.RequesterId = currentUser.Id;
 
                 loanRequest.RequestDetails = new List<RequestDetail>();
-                foreach (var detail in model.Details)
+                if (loanRequest.RequestType == RequestTypeCollection.LoanRequest)
                 {
-                    var asset = _queryAssetRepository.Find(x => x.Id == detail.AssetId).FirstOrDefault();
-                    if (asset is null)
+                    string requestcode = "LQ" + loanRequest.RequestDate.ToString("ddMMyyyyHHmmss");
+                    loanRequest.RequestCode = requestcode;
+                    loanRequest.Status = RequestStatusCollection.Pending;
+                    loanRequest.RequestDate = DateTime.Now;
+                    foreach (var detail in model.Details)
                     {
-                        return (null, "Cannot find asset", HttpStatusCode.NotFound);
+                        var asset = _queryAssetRepository.Find(x => x.Id == detail.AssetId).FirstOrDefault();
+                        if (asset is null)
+                        {
+                            return (null, "Cannot find asset", HttpStatusCode.NotFound);
+                        }
+
+                        loanRequest.RequestDetails.Add(new RequestDetail
+                        {
+                            AssetId = asset.Id,
+                            Description = detail.Description,
+                            ReturnDate = detail.ReturnDate
+                        });
                     }
-
-                    loanRequest.RequestDetails.Add(new RequestDetail
-                    {
-                        AssetId = asset.Id,
-                        Description = detail.Description,
-                        ReturnDate = detail.ReturnDate
-                    });
                 }
+                if (loanRequest.RequestType == RequestTypeCollection.StockInRequest)
+                {
+                    string requestcode = "SIQ" + loanRequest.RequestDate.ToString("ddMMyyyyHHmmss");
+                    loanRequest.RequestCode = requestcode;
+                    loanRequest.Status = (RequestStatusCollection)CommonStatusCollection.Scheduled;
+                    foreach (var detail in model.Details)
+                    {
+                        var asset = _queryAssetRepository.Find(x => x.Id == detail.AssetId).FirstOrDefault();
+                        if (asset is null)
+                        {
+                            return (null, "Cannot find asset", HttpStatusCode.NotFound);
+                        }
 
+                        loanRequest.RequestDetails.Add(new RequestDetail
+                        {
+                            AssetId = asset.Id,
+                            Description = detail.Description,
+                            ReceivedDate = detail.ReceivedDate,
+                            AssetNewLocationId = detail.AssetNewLocationId,
+                        });
+                    }
+                }
+                if (loanRequest.RequestType == RequestTypeCollection.RelocationRequest)
+                {
+                    string requestcode = "RQ" + loanRequest.RequestDate.ToString("ddMMyyyyHHmmss");
+                    loanRequest.RequestCode = requestcode;
+                    loanRequest.Status = (RequestStatusCollection)CommonStatusCollection.Scheduled;
+                    foreach (var detail in model.Details)
+                    {
+                        var asset = _queryAssetRepository.Find(x => x.Id == detail.AssetId).FirstOrDefault();
+
+                        if (asset is null)
+                        {
+                            return (null, "Cannot find asset", HttpStatusCode.NotFound);
+                        }
+
+                        loanRequest.RequestDetails.Add(new RequestDetail
+                        {
+                            AssetId = asset.Id,
+                            Description = detail.Description,
+                            ReceivedDate = detail.ReceivedDate,
+                            AssetOldLocation = asset.Location.Name,
+                            AssetNewLocationId = detail.AssetNewLocationId,
+                        });
+                    }
+                }
+                if (loanRequest.RequestType == RequestTypeCollection.MaintenanceRequest)
+                {
+                    string requestcode = "MQ" + loanRequest.RequestDate.ToString("ddMMyyyyHHmmss");
+                    loanRequest.RequestCode = requestcode;
+                    loanRequest.Status = (RequestStatusCollection)CommonStatusCollection.Scheduled;
+                    foreach (var detail in model.Details)
+                    {
+                        var asset = _queryAssetRepository.Find(x => x.Id == detail.AssetId).FirstOrDefault();
+                        if (asset is null)
+                        {
+                            return (null, "Cannot find asset", HttpStatusCode.NotFound);
+                        }
+
+                        loanRequest.RequestDetails.Add(new RequestDetail
+                        {
+                            AssetId = asset.Id,
+                            Description = detail.Description,
+                            ReceivedDate = detail.ReceivedDate,
+                            AssetOldLocation = asset.Location.Name,
+                            AssetNewLocationId = detail.AssetNewLocationId,
+                        });
+                    }
+                }
                 loanRequest.Approvals = new List<Approval>
                 {
                     new()

@@ -2,6 +2,7 @@
 using ASM.Application.Base.Interfaces;
 using ASM.Application.Shared;
 using ASM.Core.BindingModels.Request;
+using ASM.Core.Entities.Enum;
 using ASM.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ namespace ASM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class RequestController : BaseApi
     {
         private readonly IRequestService _requestService;
@@ -41,12 +42,10 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IResponse> Create([FromBody] CreateRequestBindingModel createRequestBindingModel)
+        public async Task<IResponse> Create([FromForm] CreateRequestBindingModel createRequestBindingModel)
         {
             if (createRequestBindingModel.Details is null || createRequestBindingModel.Details.Count == 0)
                 return Error("Details are required", HttpStatusCode.BadRequest);
-
-
             var result = await _requestService.Create(createRequestBindingModel);
             if (result.errMsg != "")
             {
@@ -83,7 +82,7 @@ namespace ASM.WebApi.Controllers
         }
 
         [HttpGet("/getByStatus")]
-        public async Task<IResponse> GetRequestByStatus(int status)
+        public async Task<IResponse> GetRequestByStatus(RequestStatusCollection status)
         {
             var currentUser = await _userService.GetCurrentUserAsync();
 

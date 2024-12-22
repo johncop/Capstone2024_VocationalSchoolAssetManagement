@@ -1,9 +1,11 @@
+using ASM.Core.Entities.Enum;
+
 namespace ASM.Core.BindingModels.Request
 {
     public class UpdateRequestBindingModel
     {
         public int Id { get; set; }
-        public int? Status { get; set; }
+        public RequestStatusCollection? Status { get; set; }
 
         public DateTime? RequestDate { get; set; }
 
