@@ -73,12 +73,13 @@ const AssetList = () => {
             <Column title="Location" dataIndex="location" key="location" />
             <Column title="Action" key="action" render={(_, record) => (
                 <Space size="middle">
-                    <Button type="primary" icon={<EditOutlined />}  key="edit" />
+                    <Button type="primary" icon={<EditOutlined />} onClick={() => onOpenEditModal(record)}  key="edit" />
                     <ButtonConfirm title="Delete category" description="Do you want delete this category ?"  icon={<DeleteOutlined />} />
                 </Space>)} />
         </Table>
 
-        {/* <AssetModal type={modalType} visible={openModal} onClose={() => setOpenModal(false)} assetCategory={category} onSubmit={handleSubmit} loading={submitting} /> */}
+        <AssetModal type={modalType} visible={openModal} onClose={() => setOpenModal(false)} assetCategory={category} onSubmit={handleSubmit} loading={submitting} />
+
     </>
     );
 }
