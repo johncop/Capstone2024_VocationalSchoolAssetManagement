@@ -1,0 +1,16 @@
+@use "../../../assets/styles/mixins.scss" as *;
+
+.login {
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background: url("../../../assets/images/login/login_bg.jpg");
+    background-position: center;
+}
+
+.login-main {
+    width: 450px;
+}
