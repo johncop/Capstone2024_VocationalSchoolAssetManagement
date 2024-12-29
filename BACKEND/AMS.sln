@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMS.Core", "AMS.Core\AMS.Core.csproj", "{61A55421-6CBE-40BA-978A-4C445116F28E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMS.Data", "AMS.Data\AMS.Data.csproj", "{AE0FF563-309F-4148-B15E-9A731021534D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMS.Api", "AMS.Api\AMS.Api.csproj", "{14121FB0-EEFC-4A6B-9ADA-3847D9F5055D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61A55421-6CBE-40BA-978A-4C445116F28E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61A55421-6CBE-40BA-978A-4C445116F28E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61A55421-6CBE-40BA-978A-4C445116F28E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61A55421-6CBE-40BA-978A-4C445116F28E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE0FF563-309F-4148-B15E-9A731021534D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE0FF563-309F-4148-B15E-9A731021534D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE0FF563-309F-4148-B15E-9A731021534D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE0FF563-309F-4148-B15E-9A731021534D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14121FB0-EEFC-4A6B-9ADA-3847D9F5055D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14121FB0-EEFC-4A6B-9ADA-3847D9F5055D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14121FB0-EEFC-4A6B-9ADA-3847D9F5055D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14121FB0-EEFC-4A6B-9ADA-3847D9F5055D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

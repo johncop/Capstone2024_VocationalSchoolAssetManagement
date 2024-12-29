@@ -1,0 +1,4 @@
+PM> Scaffold-DbContext 'Server=tcp:vocationalassetmanagement.database.windows.net,1433;Database=AssetManagementDB;MultipleActiveResultSets=true;User Id=johncop;Password=longphuc123@;TrustServerCertificate=True' Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context DBContext
+
+
+PM> Scaffold-DbContext 'Server=tcp:vocationalassetmanagement.database.windows.net,1433;Database=AssetManagementDB;MultipleActiveResultSets=true;User Id=johncop;Password=longphuc123@;TrustServerCertificate=True' Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force -Context DBContext
