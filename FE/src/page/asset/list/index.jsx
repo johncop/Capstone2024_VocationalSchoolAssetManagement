@@ -6,6 +6,46 @@ import { baseApi } from "../../../api/axiosInstance";
 import ButtonConfirm from "../../../component/button/buttonConfirm";
 
 const AssetList = () => {
+
+
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    //State of modal
+    const [openModal, setOpenModal] = useState(false);
+    const [modalType, setModalType] = useState("");
+    const [category, setCategory] = useState({});
+    const [submitting, setSubmitting] = useState(false);
+
+    //Other
+    const [messageApi, contextHolder] = message.useMessage();
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const fetchCategories = () => {
+        setLoading(true);
+        baseApi.get("/category").then(response => {
+            if (response.data) {
+                setCategories(response.data);
+                setLoading(false);
+            }
+        })
+    }
+
+    const onOpenEditModal = (selectedCategory) => {
+        setCategory(selectedCategory);
+        setModalType("edit");
+        setOpenModal(true);
+    }
+
+    const onOpenCreateModal = () => {
+        setModalType("create");
+        setOpenModal(true);
+        setCategory({});
+    }
+
     const { Column } = Table;
     return (
         <>
