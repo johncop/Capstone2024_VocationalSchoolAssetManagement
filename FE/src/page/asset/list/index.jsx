@@ -8,34 +8,34 @@ import ButtonConfirm from "../../../component/button/buttonConfirm";
 const AssetList = () => {
 
 
-    const [categories, setCategories] = useState([]);
+    const [asset, setAssets] = useState([]);
     const [loading, setLoading] = useState(false);
 
     //State of modal
     const [openModal, setOpenModal] = useState(false);
     const [modalType, setModalType] = useState("");
-    const [category, setCategory] = useState({});
+    const [category, setAsset] = useState({});
     const [submitting, setSubmitting] = useState(false);
 
     //Other
     const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
-        fetchCategories();
+        fetchAsset();
     }, []);
 
-    const fetchCategories = () => {
+    const fetchAsset = () => {
         setLoading(true);
-        baseApi.get("/category").then(response => {
+        baseApi.get("/asset").then(response => {
             if (response.data) {
-                setCategories(response.data);
+                setAssets(response.data);
                 setLoading(false);
             }
         })
     }
 
     const onOpenEditModal = (selectedCategory) => {
-        setCategory(selectedCategory);
+        setAsset(selectedCategory);
         setModalType("edit");
         setOpenModal(true);
     }
@@ -43,7 +43,7 @@ const AssetList = () => {
     const onOpenCreateModal = () => {
         setModalType("create");
         setOpenModal(true);
-        setCategory({});
+        setAsset({});
     }
 
     const { Column } = Table;
@@ -78,7 +78,8 @@ const AssetList = () => {
                 </Space>)} />
         </Table>
 
-        <AssetModal type={modalType} visible={openModal} onClose={() => setOpenModal(false)} assetCategory={category} onSubmit={handleSubmit} loading={submitting} />
+        <AssetModal type={modalType} visible={openModal} onClose={() => setOpenModal(false)} assetAsset={category} onSubmit={handleSubmit} loading={submitting} />
+
 
     </>
     );
